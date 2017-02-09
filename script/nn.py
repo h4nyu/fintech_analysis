@@ -12,9 +12,9 @@ if __name__ == '__main__':
 
     x_train = np.empty((0, 7))
     y_train = np.empty((0, 1))
-    for i in range(5):
-        for i in range(5):
-            path = "~/fintech_tutorial/data1/{0}.tsv".format(i)
+    for i in range(10):
+        for i in range(1):
+            path = "~/fintech_tutorial/data2/{0}.tsv".format(i)
             df = pd.read_csv(path,
                              delimiter="\t", header=None)
             print("read"
@@ -31,8 +31,8 @@ if __name__ == '__main__':
     model.add(Activation('relu'))
     model.add(Dense(output_dim=7))
     model.add(Activation('relu'))
-    model.add(Dense(output_dim=7))
-    model.add(Activation('relu'))
+    model.add(Dense(output_dim=7)) 
+    model.add(Activation('relu')) 
     model.add(Dense(output_dim=1))
     model.add(Activation('linear'))
 
@@ -40,11 +40,11 @@ if __name__ == '__main__':
     early_stopping = EarlyStopping(patience=3, verbose=0)
     history = model.fit(x_train, y_train, nb_epoch=2000,
                         batch_size=2,
-                        validation_split=0.3,
+                        validation_split=0.4,
                         verbose=2,
                         callbacks=[early_stopping])
 
-    path = "~/fintech_tutorial/data1/5.tsv"
+    path = "~/fintech_tutorial/data2/1.tsv"
     df = pd.read_csv(path,
                      delimiter="\t")
 
