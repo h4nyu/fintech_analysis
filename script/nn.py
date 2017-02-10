@@ -25,15 +25,7 @@ if __name__ == '__main__':
                 df.ix[0:, 1]).reshape(len(df), 1), axis=0)
 
     model = Sequential()
-    model.add(Dense(input_dim=7, output_dim=7))
-    model.add(Activation('linear'))
-    model.add(Dense(output_dim=7))
-    model.add(Activation('relu'))
-    model.add(Dense(output_dim=7))
-    model.add(Activation('relu'))
-    model.add(Dense(output_dim=7)) 
-    model.add(Activation('relu')) 
-    model.add(Dense(output_dim=1))
+    model.add(Dense(input_dim=7, output_dim=1))
     model.add(Activation('linear'))
 
     model.compile(loss="mse", optimizer='rmsprop', metrics=['accuracy'])
@@ -60,6 +52,9 @@ if __name__ == '__main__':
         diff = abs((answer - predict))
         print("predict:{0}, answer:{1}, diff:{2}".format(
             predict, answer, diff))
+
+    for w in model.get_weights()[0]:
+        print("weight is {0}".format(w))
 
     plt.plot(history.history['loss'])
     plt.plot(history.history['val_loss'])
