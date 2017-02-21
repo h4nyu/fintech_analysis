@@ -3,12 +3,9 @@
 
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.layers import Input
-from keras.layers import Activation
 from keras.models import model_from_json
 from keras.regularizers import l1
 from keras.callbacks import EarlyStopping
-from helper import Reader
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -26,8 +23,8 @@ class NeuralNet(object):
         self.output_dim = None
         self.early_stopping = EarlyStopping(patience=3, verbose=0)
 
-    def save_weight(self, path):
-        self.model.save_weights(path, overwrite=True)
+    def save(self, model_path):
+        self.model.save(model_path)
 
     def set_dataset(self, x_train, y_train):
         self.x_train = x_train
@@ -47,8 +44,10 @@ class NeuralNet(object):
         print(layer_nodes)
 
         self.model = Sequential()
-        self.model.add(
-            Dense(int(layer_nodes[1]), input_shape=(int(layer_nodes[0]),)))
+        self.model.add(Dense(int(layer_nodes[1]),
+                             input_shape=(int(layer_nodes[0]),),
+                             W_regularizer=l1(0.01)
+                             ))
 
         layer_nodes.pop(0)
         layer_nodes.pop(0)
@@ -70,11 +69,11 @@ class NeuralNet(object):
                                       validation_split=0.4,
                                       verbose=2,
                                       callbacks=[self.early_stopping])
+
     def show_graph(self):
         plt.plot(self.history.history['loss'])
         plt.plot(self.history.history['val_loss'])
         plt.show()
-
 
 
 if __name__ == "__main__":

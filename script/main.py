@@ -5,7 +5,7 @@ from helper import DatasetGenerator
 
 
 def liner(factors):
-    return [factors[0] + factors[2]]
+    return [factors[0] * factors[2]]
 
 
 if __name__ == "__main__":
@@ -18,3 +18,4 @@ if __name__ == "__main__":
     neuralnet.build_model(3)
     neuralnet.fit()
     neuralnet.show_graph()
+    neuralnet.save("model.h5")

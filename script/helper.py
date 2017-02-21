@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
+from keras.models import load_model
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 class DatasetGenerator(object):
@@ -17,21 +20,18 @@ class DatasetGenerator(object):
         return (x_train, y_train)
 
 
-def function(factors):
-    return factors[0] + factors[1]
+class WeightVeiwer(object):
 
+    """Docstring for WeightVeiwer. """
 
-class Reader(object):
+    def __init__(self, weight_path):
+        self.model = load_model(weight_path)
 
-    """Docstring for Reader. """
-
-    def __init__(self):
-        pass
+    def show_weight(self):
+        sns.heatmap(self.model.get_weights()[0])
+        plt.show()
 
 
 if __name__ == "__main__":
-    g = DatasetGenerator(10)
-    g.generate(function, 100)
-    for i in np.linspace(3, 8, 3):
-        print(i)
-        print int(i)
+    w = WeightVeiwer("./model.h5")
+    w.show_weight()
