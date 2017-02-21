@@ -3,6 +3,7 @@
 
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.layers import Activation
 from keras.models import model_from_json
 from keras.regularizers import l1
 from keras.callbacks import EarlyStopping
@@ -38,7 +39,7 @@ class NeuralNet(object):
         self.model = model_from_json(model_path)
         self.model.load_weights(weight_path)
 
-    def build_model(self, layer_num):
+    def build_model(self, layer_num=3):
         layer_nodes = list(np.linspace(
             self.input_dim, self.output_dim, layer_num + 1))
         print(layer_nodes)
@@ -46,15 +47,17 @@ class NeuralNet(object):
         self.model = Sequential()
         self.model.add(Dense(int(layer_nodes[1]),
                              input_shape=(int(layer_nodes[0]),),
-                             W_regularizer=l1(0.01)
+                             W_regularizer=l1(0.02)
                              ))
 
+        # self.model.add(Activation("linear"))
         layer_nodes.pop(0)
         layer_nodes.pop(0)
 
         for dim in layer_nodes:
-            print(dim)
             self.model.add(Dense(int(dim)))
+
+        # self.model.add(Activation("linear"))
 
         self.model.summary()
 
@@ -74,6 +77,13 @@ class NeuralNet(object):
         plt.plot(self.history.history['loss'])
         plt.plot(self.history.history['val_loss'])
         plt.show()
+
+    def predict(self, x_train):
+        return self.model.predict(x_train)
+
+    def validate(self, x_train, y_train):
+        for ans, pred in zip(y_train, self.predict(x_train)):
+            print("ans: {0},\t predict:{1}".format(ans[0], pred[0]))
 
 
 if __name__ == "__main__":
