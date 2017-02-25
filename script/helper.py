@@ -54,7 +54,7 @@ class Reader(object):
         self.y_train = y_train
         return (self.x_train, self.y_train)
 
-    def get_time_window_dataset(self, row):
+    def get_time_window_dataset(self):
         x_train_2 = []
         y_train_2 = []
 
@@ -108,15 +108,8 @@ class WeightVeiwer(object):
         plt.bar(range(len(sum_times)), sum_times)
         plt.show()
 
+
 if __name__ == "__main__":
-    # reader = Reader()
-    # reader.set_path(["~/fintech_tutorial/dataset/data2/1.tsv"])
-    #
-    # reader.read(x_start_col=2,
-    #             x_end_col=8,
-    #             y_start_col=1,
-    #             y_end_col=1)
-    # reader.get_time_window_dataset(1)
     w = WeightVeiwer("model.h5")
     w.show_bar()
     w.show_times(4, 7)

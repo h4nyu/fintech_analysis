@@ -25,7 +25,7 @@ if __name__ == "__main__":
                 y_start_col=1,
                 y_end_col=1)
 
-    (x_train, y_train) = reader.get_time_window_dataset(1)
+    (x_train, y_train) = reader.get_time_window_dataset()
 
     # set model
     neuralnet = NeuralNet()
@@ -46,7 +46,7 @@ if __name__ == "__main__":
                                      y_start_col=1,
                                      y_end_col=1)
 
-    (x_train, y_train) = reader.get_time_window_dataset(1)
+    (x_train, y_train) = reader.get_time_window_dataset()
 
     # validation
     neuralnet.validate(x_train, y_train)
