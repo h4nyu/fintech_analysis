@@ -8,15 +8,6 @@ if __name__ == "__main__":
 
     # read training dataset
     file_path_list = []
-    for i in range(4):
-        file_path_list.append(
-            "~/fintech_tutorial/dataset/data0/{0}.tsv".format(i))
-    for i in range(5):
-        file_path_list.append(
-            "~/fintech_tutorial/dataset/data1/{0}.tsv".format(i))
-    for i in range(1):
-        file_path_list.append(
-            "~/fintech_tutorial/dataset/data2/{0}.tsv".format(i))
 
     reader = Reader()
     reader.set_path(file_path_list)
