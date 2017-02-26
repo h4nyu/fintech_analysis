@@ -1,4 +1,6 @@
 # Todo
 
 * normalize
+* Database
+* 
 
