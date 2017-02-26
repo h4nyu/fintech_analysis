@@ -1,8 +1,9 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3.5
 # -*- coding: utf-8 -*-
 import requests
 import csv
 from datetime import datetime
+from io import StringIO
 from pprint import pprint
 from abc import ABCMeta
 from abc import abstractmethod
@@ -73,12 +74,10 @@ class GCollector(Dao):
 
     def __init__(self):
         """TODO: to be defined1. """
-        self.api_url = 'https://www.google.com/finance/getprices?'
+        pass
 
     def get_histrical_data(self, symbol, exchange_code, start_time, interval):
         unix_time = int(start_time.timestamp())
-        print(unix_time)
-
         pyload = {
             'q': symbol,
             'x': exchange_code,
@@ -90,21 +89,28 @@ class GCollector(Dao):
             'ts': unix_time,
         }
 
+        self.prices_url = 'https://www.google.com/finance/getprices?'
         r = requests.get(self.api_url, params=pyload)
-        print(r.url)
+
         lines = r.text.splitlines()
-        f  = [list(map(float, i)) for i in csv.reader(lines[9:])]
-        print(len(f))
-        # print(type(ts))
-        # te = ts + interval * int(prices[-1][0])
-        # print(datetime.fromtimestamp(ts))
-        # print(datetime.fromtimestamp(te))
-        # pprint(r.text)
+        prices = [item.split(',') for item in lines[8:]]
+        start_timestamp = float(prices[0][0].lstrip('a'))
+        prices[0][0] = start_timestamp
+        for row in prices[1:]:
+            row[0] = start_timestamp + float(row[0])
+
+        return np.array(prices)
 
     def get_quote(self, symbol):
-        raise NotImplementedError
+        pyload = {
+            'q': symbol,
+        }
+        self.quote_url = 'https://www.google.com/finance/info?'
+        r = requests.get(self.quote_url, params=pyload)
+        return r.text
 
 
 if __name__ == "__main__":
-    y=GCollector()
-    y.get_histrical_data('7751', 'TYO', datetime(2015, 2, 3), 86400)
+    y = GCollector()
+    pprint(y.get_quote('7751'))
+
