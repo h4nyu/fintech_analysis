@@ -9,6 +9,7 @@ from abc import ABCMeta
 from abc import abstractmethod
 import pandas as pd
 import numpy as np
+import json
 
 
 class Dao(metaclass=ABCMeta):
@@ -107,10 +108,11 @@ class GCollector(Dao):
         }
         self.quote_url = 'https://www.google.com/finance/info?'
         r = requests.get(self.quote_url, params=pyload)
-        return r.text
+        text = r.text[3:]
+        return json.loads(text)[0]
 
 
 if __name__ == "__main__":
     y = GCollector()
-    pprint(y.get_quote('7751'))
-
+    r = y.get_quote('7751')
+    print(r)
