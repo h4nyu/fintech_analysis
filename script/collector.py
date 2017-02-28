@@ -77,7 +77,12 @@ class GCollector(Dao):
         """TODO: to be defined1. """
         pass
 
-    def get_histrical_data(self, symbol, exchange_code, start_time, interval):
+    def get_histrical_data(self,
+                           symbol,
+                           start_time,
+                           exchange_code='TYO',
+                           interval=86400):
+
         unix_time = int(start_time.timestamp())
         pyload = {
             'q': symbol,
@@ -91,7 +96,7 @@ class GCollector(Dao):
         }
 
         self.prices_url = 'https://www.google.com/finance/getprices?'
-        r = requests.get(self.api_url, params=pyload)
+        r = requests.get(self.prices_url, params=pyload)
 
         lines = r.text.splitlines()
         prices = [item.split(',') for item in lines[8:]]
@@ -114,5 +119,8 @@ class GCollector(Dao):
 
 if __name__ == "__main__":
     y = GCollector()
-    r = y.get_quote('7751')
+
+    r = y.get_histrical_data('7751',
+                             datetime(2016, 9, 15),
+                             )
     print(r)
