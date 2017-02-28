@@ -52,7 +52,7 @@ class NeuralNet(object):
         self.model = Sequential()
 
         self.model.add(Dense(int(layer_nodes[1]),
-                             W_regularizer=l2(0.01),
+                             W_regularizer=l2(0.005),
                              input_shape=(int(layer_nodes[0]),)))
         self.model.add(Activation("linear"))
 

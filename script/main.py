@@ -30,7 +30,7 @@ if __name__ == "__main__":
     # set model
     neuralnet = NeuralNet()
     neuralnet.set_dataset(x_train=x_train, y_train=y_train)
-    neuralnet.build_model(5)
+    neuralnet.build_model(4)
 
     # train
     neuralnet.fit()
