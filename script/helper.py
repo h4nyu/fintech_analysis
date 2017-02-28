@@ -30,7 +30,7 @@ class Reader(object):
     def __init__(self):
         self.file_path_list = None
 
-    def set_path(self, file_path_list):
+    def set_paths(self, file_path_list):
         self.file_path_list = file_path_list
 
     def read(self, x_start_col, x_end_col, y_start_col, y_end_col):
@@ -38,7 +38,7 @@ class Reader(object):
         y_train = np.empty((0, y_start_col - y_end_col + 1))
         for path in self.file_path_list:
             df = pd.read_csv(path,
-                             delimiter="\t", header=None)
+                             delimiter=",", header=None)
             print("read"
                   + path
                   + "for training")
@@ -110,7 +110,5 @@ class WeightVeiwer(object):
 
 
 if __name__ == "__main__":
-    w = WeightVeiwer("model.h5")
-    w.show_bar()
-    w.show_times(4, 7)
-    w.sum_times()
+    r = Reader()
+    r.set_paths(['~/fintech_tutorial/dataset/datajf8/0.csv'])
