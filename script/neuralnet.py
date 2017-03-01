@@ -51,18 +51,21 @@ class NeuralNet(object):
 
         self.model = Sequential()
 
-        self.model.add(Dense(int(layer_nodes[1]),
-                             W_regularizer=l2(0.005),
+        self.model.add(Dense(int(self.input_dim),
+                             W_regularizer=l2(0.01),
                              input_shape=(int(layer_nodes[0]),)))
+
         self.model.add(Activation("linear"))
 
         layer_nodes.pop(0)
         layer_nodes.pop(0)
         layer_nodes.pop(len(layer_nodes) - 1)
 
-        for dim in layer_nodes:
-            self.model.add(Dense(int(dim)))
-            self.model.add(Activation("softsign"))
+        self.model.add(Dense(6))
+        self.model.add(Activation("relu"))
+
+        self.model.add(Dense(6))
+        self.model.add(Activation("relu"))
 
         self.model.add(Dense(int(self.output_dim)))
         self.model.add(Activation("linear"))
@@ -80,7 +83,7 @@ class NeuralNet(object):
         self.history = self.model.fit(self.x_train,
                                       self.y_train,
                                       nb_epoch=2000,
-                                      batch_size=2,
+                                      batch_size=1,
                                       validation_split=0.3,
                                       verbose=2,
                                       callbacks=[self.early_stopping])
@@ -95,7 +98,10 @@ class NeuralNet(object):
 
     def validate(self, x_train, y_train):
         for ans, pred in zip(y_train, self.predict(x_train)):
-            print("ans: {0},\t predict:{1}".format(ans[0], pred[0]))
+            row = "ans: \t{0: 3.3f}, predict: \t{1: 3.3f}, diff:\t{2: 3.3f}"
+            print(row.format(ans[0],
+                             pred[0],
+                             pred[0] - ans[0]))
 
 
 if __name__ == "__main__":
