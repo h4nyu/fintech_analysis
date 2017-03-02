@@ -9,10 +9,9 @@ if __name__ == "__main__":
     # read training dataset
 
     file_path_list = []
-    for i in range(10):
-        for i in range(29):
-            file_path_list.append(
-                '~/fintech_tutorial/dataset/datazq8/{0}.csv'.format(i))
+    for i in range(8):
+        file_path_list.append(
+            '~/fintech_tutorial/dataset/datadstz8/{0}.csv'.format(i))
 
     x_start_col = 2
     x_end_col = 9
@@ -31,7 +30,7 @@ if __name__ == "__main__":
     # set model
     neuralnet = NeuralNet()
     neuralnet.set_dataset(x_train=x_train, y_train=y_train)
-    neuralnet.build_model(4)
+    neuralnet.build_model(3)
 
     # train
     neuralnet.fit()
@@ -41,7 +40,7 @@ if __name__ == "__main__":
     neuralnet.save("model.h5")
 
     # read validation dataset
-    reader.set_paths(["~/fintech_tutorial/dataset/datazq8/29.csv"])
+    reader.set_paths(["~/fintech_tutorial/dataset/datadstz8/8.csv"])
     (x_train, y_train) = reader.read(x_start_col,
                                      x_end_col,
                                      y_start_col,
