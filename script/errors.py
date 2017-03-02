@@ -11,12 +11,17 @@ def get_sum_of_squares_error(predicts, answers):
     return sum_of_squares_error / 2.0
 
 
+def get_rms_error(sse, sample_size):
+    return np.sqrt(sse / float(sample_size))
+
+
 if __name__ == "__main__":
-    sample_size = 4
+    sample_size = 100
     answers = [np.sin(i) for i in range(sample_size)]
     noise = np.random.rand(sample_size)
-    noise_weight = 4
+    noise_weight = 1
     predicts = [a + noise_weight * n for a, n in zip(answers, noise)]
 
     sse = get_sum_of_squares_error(predicts, answers)
-    print(sse)
+    rms = get_rms_error(sse, sample_size)
+    print("rms error is {0}".format(rms))

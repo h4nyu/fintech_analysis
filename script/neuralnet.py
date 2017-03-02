@@ -13,6 +13,7 @@ from keras.regularizers import l2
 from keras.callbacks import EarlyStopping
 import numpy as np
 import matplotlib.pyplot as plt
+import errors
 
 
 class NeuralNet(object):
@@ -97,12 +98,15 @@ class NeuralNet(object):
         return self.model.predict(x_train)
 
     def validate(self, x_train, y_train):
-        for ans, pred in zip(y_train, self.predict(x_train)):
+        preds = self.predict(x_train)
+        answers = y_train
+
+        for ans, pred in zip(answers, preds):
             row = "ans: \t{0: 3.3f}, predict: \t{1: 3.3f}, diff:\t{2: 3.3f}"
             print(row.format(ans[0],
                              pred[0],
                              pred[0] - ans[0]))
 
-
-if __name__ == "__main__":
-    neuralnet = NeuralNet()
+        sse = errors.get_sum_of_squares_error(preds, answers)
+        rms = errors.get_rms_error(sse, len(answers))
+        print("rms error is {0}".format(rms))
