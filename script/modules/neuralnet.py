@@ -13,7 +13,7 @@ from keras.regularizers import l2
 from keras.callbacks import EarlyStopping
 import numpy as np
 import matplotlib.pyplot as plt
-import errors
+from . import errors
 
 
 class NeuralNet(object):
