@@ -16,6 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from . import errors
 from keras import backend as K
+from keras import metrics
 
 
 class NeuralNet(object):
@@ -60,15 +61,15 @@ class NeuralNet(object):
             self.model.add(Activation("relu"))
 
         self.model.add(Dense(int(self.output_dim)))
-        self.model.add(Activation("linear"))
+        self.model.add(Activation("sigmoid"))
 
         self.model.summary()
 
         # sgd = SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True)
-        opt = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
+        opt = RMSprop(lr=0.0005, rho=0.9, epsilon=1e-08, decay=0.0)
 
-        self.model.compile(loss="mse", optimizer=opt,
-                           metrics=['mse'])
+        self.model.compile(loss="categorical_crossentropy", optimizer=opt,
+                           metrics=['categorical_accuracy'])
 
     def fit(self, batch_size):
         self.early_stopping = EarlyStopping(patience=3, verbose=0)
@@ -103,3 +104,11 @@ class NeuralNet(object):
 
         mse = K.eval(mean_squared_error(ans_t, pred_t))
         print("mean squared error is {0}".format(mse))
+
+    def validate_category(self, x_train, y_train):
+        preds = self.predict(x_train)
+        result = [np.equal(np.argmax(pred), np.argmax(ans))
+                  for pred, ans in zip(preds, y_train)]
+        for ans, pred in zip(y_train, preds):
+            print(np.argmax(ans), np.argmax(pred))
+        print(np.mean(result))

@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # read training dataset
 
     file_path_list = []
-    for i in range(44):
+    for i in range(1, 45):
         file_path_list.append(
             '~/fintech_tutorial/dataset/datadsq8/{0}.csv'.format(i))
 
@@ -24,32 +24,34 @@ if __name__ == "__main__":
                                      x_end_col,
                                      y_start_col,
                                      y_end_col)
+    y_train = reader.change_to_one_hot(y_train)
 
     # (x_train, y_train) = reader.get_time_window_dataset()
 
     # set model
     neuralnet = NeuralNet()
     neuralnet.set_dataset(x_train=x_train, y_train=y_train)
-    neuralnet.build_model(layer_num=3, l1=0.05)
+    neuralnet.build_model(layer_num=4, l1=0.01)
 
     # train
-    neuralnet.fit(batch_size=20)
-    # neuralnet.show_graph()
+    neuralnet.fit(batch_size=10)
+    neuralnet.show_graph()
 
     # save model
     neuralnet.save("model.h5")
 
     # read validation dataset
-    reader.set_paths(["~/fintech_tutorial/dataset/datadsq8/44.csv"])
+    reader.set_paths(["~/fintech_tutorial/dataset/datadstz8/8.csv"])
     (x_train, y_train) = reader.read(x_start_col,
                                      x_end_col,
                                      y_start_col,
                                      y_end_col)
 
     # validation
-    neuralnet.validate(x_train, y_train)
+    y_train = reader.change_to_one_hot(y_train)
+    neuralnet.validate_category(x_train, y_train)
 
     # veiw weights
     w = WeightVeiwer("model.h5")
-    # w.show_heatmap()
-    # w.show_bar()
+    w.show_heatmap()
+    w.show_bar()

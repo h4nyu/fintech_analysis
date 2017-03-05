@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
 from sklearn import preprocessing
+from keras.utils import np_utils
+from pprint import pprint
 sns.set()
 
 
@@ -53,6 +55,14 @@ class Reader(object):
         self.x_train = x_train
         self.y_train = y_train
         return (self.x_train, self.y_train)
+
+    def change_to_one_hot(self, y_train):
+        max_num = int(np.max(y_train))
+        min_num = int(np.min(y_train))
+        span = max_num - min_num
+        y_int_train = np.array([int(i > 0) for i in y_train])
+
+        return np_utils.to_categorical(y_int_train)
 
     def get_time_window_dataset(self):
         x_train_2 = []
@@ -110,5 +120,20 @@ class WeightVeiwer(object):
 
 
 if __name__ == "__main__":
-    r = Reader()
-    r.set_paths(['~/fintech_tutorial/dataset/datajf8/0.csv'])
+    file_path_list = []
+    for i in range(1):
+        file_path_list.append(
+            '~/fintech_tutorial/dataset/datadsq8/{0}.csv'.format(i))
+
+    x_start_col = 2
+    x_end_col = 9
+    y_start_col = 1
+    y_end_col = 1
+
+    reader = Reader()
+    reader.set_paths(file_path_list)
+    (x_train, y_train) = reader.read(x_start_col,
+                                     x_end_col,
+                                     y_start_col,
+                                     y_end_col)
+    pprint(reader.change_to_one_hot(y_train))
