@@ -45,28 +45,17 @@ class NeuralNet(object):
         self.model = model_from_json(model_path)
         self.model.load_weights(weight_path)
 
-    def build_model(self, layer_num=3):
-        layer_nodes = list(np.linspace(
-            self.input_dim, self.output_dim, layer_num + 1))
-        print(layer_nodes)
-
+    def build_model(self,  layer_num=3, l1=0.01):
         self.model = Sequential()
-
         self.model.add(Dense(int(self.input_dim),
-                             W_regularizer=l2(0.01),
-                             input_shape=(int(layer_nodes[0]),)))
+                             W_regularizer=l2(l1),
+                             input_shape=(self.input_dim,)))
 
         self.model.add(Activation("linear"))
 
-        layer_nodes.pop(0)
-        layer_nodes.pop(0)
-        layer_nodes.pop(len(layer_nodes) - 1)
-
-        self.model.add(Dense(6))
-        self.model.add(Activation("relu"))
-
-        self.model.add(Dense(6))
-        self.model.add(Activation("relu"))
+        for i in range(layer_num - 1):
+            self.model.add(Dense(self.input_dim))
+            self.model.add(Activation("relu"))
 
         self.model.add(Dense(int(self.output_dim)))
         self.model.add(Activation("linear"))
@@ -79,12 +68,12 @@ class NeuralNet(object):
         self.model.compile(loss="mse", optimizer=opt,
                            metrics=['mse'])
 
-    def fit(self):
+    def fit(self, batch_size):
         self.early_stopping = EarlyStopping(patience=3, verbose=0)
         self.history = self.model.fit(self.x_train,
                                       self.y_train,
                                       nb_epoch=2000,
-                                      batch_size=1,
+                                      batch_size=batch_size,
                                       validation_split=0.3,
                                       verbose=2,
                                       callbacks=[self.early_stopping])

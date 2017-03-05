@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from neuralnet import NeuralNet
-from helper import WeightVeiwer
-from helper import Reader
+from modules import NeuralNet
+from modules import WeightVeiwer
+from modules import Reader
 
 if __name__ == "__main__":
 
@@ -30,10 +30,10 @@ if __name__ == "__main__":
     # set model
     neuralnet = NeuralNet()
     neuralnet.set_dataset(x_train=x_train, y_train=y_train)
-    neuralnet.build_model(3)
+    neuralnet.build_model(layer_num=3, l1=0.02)
 
     # train
-    neuralnet.fit()
+    neuralnet.fit(batch_size=5)
     neuralnet.show_graph()
 
     # save model

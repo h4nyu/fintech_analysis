@@ -24,4 +24,3 @@ if __name__ == "__main__":
 
     sse = get_sum_of_squares_error(predicts, answers)
     rms = get_rms_error(sse, sample_size)
-    print("rms error is {0}".format(rms))

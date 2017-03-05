@@ -89,16 +89,12 @@ class WeightVeiwer(object):
 
     def show_bar(self):
         self.plotlist = []
-
-
         for item in self.model.get_weights()[0]:
             self.plotlist.append(np.abs(item).sum())
         self.plotlist = np.array(self.plotlist)
         print(self.plotlist)
         plt.bar(range(len(self.plotlist)), self.plotlist)
         plt.show()
-
-
 
     def show_times(self, row, col):
         self.times = self.plotlist.reshape(row, col)
