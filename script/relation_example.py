@@ -3,9 +3,9 @@
 from pprint import pprint
 import matplotlib.pyplot as plt
 import numpy as np
-from helper import DatasetGenerator
-from helper import WeightVeiwer
-from neuralnet import NeuralNet
+from modules import DatasetGenerator
+from modules import WeightVeiwer
+from modules import NeuralNet
 
 
 def model_with_relation(factors):
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     neuralnet = NeuralNet()
     neuralnet.set_dataset(x_train=x_train, y_train=y_train)
     neuralnet.build_model(4)
-    neuralnet.fit()
+    neuralnet.fit(batch_size=100)
     neuralnet.save('reg_test.h5')
 
     w = WeightVeiwer("reg_test.h5")
