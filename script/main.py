@@ -11,7 +11,7 @@ if __name__ == "__main__":
     file_path_list = []
     for i in range(8):
         file_path_list.append(
-            '~/fintech_tutorial/dataset/datadstz8/{0}.csv'.format(i))
+            '~/fintech_tutorial/dataset/datadsq8/{0}.csv'.format(i))
 
     x_start_col = 2
     x_end_col = 9

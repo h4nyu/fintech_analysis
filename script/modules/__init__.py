@@ -1,3 +1,6 @@
-from neuralnet import *
-from helper import *
-from errors import *
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from .neuralnet import *
+from .helper import *
+from .errors import *
