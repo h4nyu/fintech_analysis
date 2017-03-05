@@ -9,11 +9,13 @@ from keras.layers import Activation
 from keras.optimizers import RMSprop
 from keras.models import model_from_json
 from keras.regularizers import l2
+from keras.objectives import mean_squared_error
 # from keras.regularizers import l1
 from keras.callbacks import EarlyStopping
 import numpy as np
 import matplotlib.pyplot as plt
 from . import errors
+from keras import backend as K
 
 
 class NeuralNet(object):
@@ -96,6 +98,8 @@ class NeuralNet(object):
                              pred[0],
                              pred[0] - ans[0]))
 
-        sse = errors.get_sum_of_squares_error(preds, answers)
-        rms = errors.get_rms_error(sse, len(answers))
-        print("rms error is {0}".format(rms))
+        ans_t = answers.reshape(answers.shape[1], answers.shape[0])
+        pred_t = preds.reshape(preds.shape[1], preds.shape[0])
+
+        mse = K.eval(mean_squared_error(ans_t, pred_t))
+        print("mean squared error is {0}".format(mse))

@@ -15,6 +15,10 @@ def get_rms_error(sse, sample_size):
     return np.sqrt(sse / float(sample_size))
 
 
+def get_ms_error(sse, sample_size):
+    return sse / float(sample_size)
+
+
 if __name__ == "__main__":
     sample_size = 100
     answers = [np.sin(i) for i in range(sample_size)]

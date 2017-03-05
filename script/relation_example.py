@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
     neuralnet = NeuralNet()
     neuralnet.set_dataset(x_train=x_train, y_train=y_train)
-    neuralnet.build_model(4)
+    neuralnet.build_model(4, l1=0.04)
     neuralnet.fit(batch_size=100)
     neuralnet.save('reg_test.h5')
 
