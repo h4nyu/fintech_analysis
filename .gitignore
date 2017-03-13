@@ -1,2 +1,8 @@
 *.pyc
 *.h5
+bin
+lib
+include
+
+
+
