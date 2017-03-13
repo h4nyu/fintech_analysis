@@ -3,6 +3,7 @@
 import requests
 import csv
 from datetime import datetime
+from datetime import timedelta
 from io import StringIO
 from pprint import pprint
 from abc import ABCMeta
@@ -27,6 +28,33 @@ class Dao(metaclass=ABCMeta):
     @abstractmethod
     def get_quote(self, symbol):
         pass
+
+
+class DataChunk(object):
+
+    """Docstring for DataChunk. """
+
+    def __init__(self):
+        """TODO: to be defined1. """
+        self.timestamp_header = None
+        self.frames = None
+        self.interval = None
+        self.colums = None
+        self.date_sessions = None
+        self.timezone_offset = None
+
+    def read_text(self, text):
+        pass
+
+
+class Frame(object):
+
+    """Docstring for DataChunk. """
+
+    def __init__(self):
+        """TODO: to be defined1. """
+        self.timestamp_header = None
+        self.frames = None
 
 
 class YCollector(Dao):
@@ -75,15 +103,17 @@ class GCollector(Dao):
 
     def __init__(self):
         """TODO: to be defined1. """
-        pass
+        self.base_timestamp = None
 
     def get_histrical_data(self,
                            symbol,
                            start_time,
-                           exchange_code='TYO',
-                           interval=86400):
+                           end_date,
+                           interval=60,
+                           exchange_code='TYO'
+                           ):
 
-        unix_time = int(start_time.timestamp())
+        unix_time = start_time.timestamp()
         pyload = {
             'q': symbol,
             'x': exchange_code,
@@ -94,18 +124,36 @@ class GCollector(Dao):
             'f': 'd,h,o,c,v',
             'ts': unix_time,
         }
-
         self.prices_url = 'https://www.google.com/finance/getprices?'
+
         r = requests.get(self.prices_url, params=pyload)
 
-        lines = r.text.splitlines()
-        prices = [item.split(',') for item in lines[8:]]
-        start_timestamp = float(prices[0][0].lstrip('a'))
-        prices[0][0] = start_timestamp
-        for row in prices[1:]:
-            row[0] = start_timestamp + float(row[0])
+        lines = r.text.split('\n')
+        header_lines = lines[:8]
+        columns = header_lines[4][8:].split(',')
 
-        return np.array(prices)
+        self.interval = int(header_lines[3][9:])
+        self.offset = int(header_lines[7][16:])
+
+        body_lines = [line.split(',') for line in lines[8:]]
+
+        df = pd.DataFrame(body_lines, columns=columns)
+        df = df.dropna()
+
+        df["DATE"] = df["DATE"].map(
+            lambda x: self.convert_timestamp(x, interval))
+        df = df.astype(float)
+        df["DATE"] = df["DATE"].map(lambda x: datetime.fromtimestamp(x))
+
+        return df
+
+    def convert_timestamp(self, line, interval):
+        if("a" in line):
+            line = float(line.lstrip('a'))
+            self.base_timestamp = line
+        else:
+            line = self.base_timestamp + float(line) * interval
+        return float(line) + self.offset
 
     def get_quote(self, symbol):
         pyload = {
@@ -119,8 +167,6 @@ class GCollector(Dao):
 
 if __name__ == "__main__":
     y = GCollector()
-
-    r = y.get_histrical_data('7751',
-                             datetime(2016, 9, 15),
-                             )
-    print(r)
+    r = y.get_histrical_data(7751, datetime.now() -
+                             timedelta(days=4), datetime.now())
+    pprint(r)
