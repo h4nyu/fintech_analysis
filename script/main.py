@@ -9,7 +9,7 @@ if __name__ == "__main__":
     # read training dataset
 
     file_path_list = []
-    for i in range(0, 5):
+    for i in range(0, 4):
         file_path_list.append(
             '~/fintech_tutorial/dataset/datahzw8/{0}.csv'.format(i))
 
@@ -35,7 +35,7 @@ if __name__ == "__main__":
     neuralnet.build_model(layer_num=4, l1=0.01)
 
     # train
-    neuralnet.fit(batch_size=10)
+    neuralnet.fit(batch_size=3)
     neuralnet.show_graph()
 
     # save model
@@ -54,6 +54,7 @@ if __name__ == "__main__":
 
     # veiw weights
     w = WeightVeiwer("model.h5")
-    w.show_heatmap()
-    w.show_bar()
-    w.show_dual_bar()
+    w.set_col_names(['alpha', 'sharp', 'col', 'col', 'co', 'c', 'a'])
+    w.show_abs_bar()
+    w.show_sum_bar()
+    w.show_pn_bar()

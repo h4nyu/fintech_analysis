@@ -99,30 +99,60 @@ class WeightVeiwer(object):
         sns.heatmap(self.input_weights)
         plt.show()
 
-    def show_bar(self):
-        self.plotlist = []
-        for item in self.model.get_weights()[0]:
-            self.plotlist.append(np.abs(item).sum())
-        self.plotlist = np.array(self.plotlist)
-        print(self.plotlist)
-        plt.bar(range(len(self.plotlist)), self.plotlist)
+    def set_col_names(self, array):
+        self.col_names = list(array)
+        if len(array) < len(self.input_weights[0]):
+            for i in range(len(self.input_weights[0]) - len(array)):
+                self.col_names.append("")
+        self.col_names = self.col_names[:len(self.input_weights[0])]
+
+    def show_abs_bar(self):
+        plotlist = []
+        for item in self.input_weights:
+            plotlist.append(np.abs(item).sum())
+        print("---abs,sum---")
+        print(plotlist)
+        print("---abs,sum---")
+        f, axarr = plt.subplots()
+        axarr.bar(range(len(plotlist)), plotlist)
+        axarr.set_xticklabels(self.col_names)
         plt.show()
 
-    def show_dual_bar(self):
+    def show_sum_bar(self):
+        plotlist = []
+        for item in self.model.get_weights()[0]:
+            plotlist.append(item.sum())
+        print("---sum---")
+        print(plotlist)
+        print("---sum---")
+        f, axarr = plt.subplots(1)
+        axarr.bar(range(len(plotlist)), plotlist)
+        axarr.set_xticklabels(self.col_names)
+        plt.show()
+
+    def show_pn_bar(self):
         positives = []
         negatives = []
         print(self.input_weights.shape)
         for i in self.input_weights:
             positives.append(i[i > 0].sum())
             negatives.append(i[i < 0].sum())
+
+        print("---positive,sum---")
+        print(positives)
+        print("---positive,sum---")
+        print("---negatives,sum---")
+        print(negatives)
+        print("---negatives,sum---")
         f, axarr = plt.subplots(2)
         axarr[0].bar(range(len(positives)), positives)
+        axarr[0].set_xticklabels(self.col_names)
         axarr[1].bar(range(len(negatives)), negatives)
+        axarr[1].set_xticklabels(self.col_names)
         plt.show()
 
     def show_times(self, row, col):
         self.times = self.plotlist.reshape(row, col)
-
         for item in self.times:
             plt.scatter(range(len(item)), item)
         plt.show()
