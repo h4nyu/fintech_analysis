@@ -109,9 +109,11 @@ class GCollector(Dao):
                            symbol,
                            start_time,
                            end_date,
-                           interval=60,
+                           interval
                            exchange_code='TYO'
                            ):
+        if interval < 60:
+            interval = 60
 
         unix_time = start_time.timestamp()
         pyload = {
@@ -134,6 +136,7 @@ class GCollector(Dao):
 
         self.interval = int(header_lines[3][9:])
         self.offset = int(header_lines[7][16:])
+        pprint(self.interval)
 
         body_lines = [line.split(',') for line in lines[8:]]
 
@@ -168,5 +171,5 @@ class GCollector(Dao):
 if __name__ == "__main__":
     y = GCollector()
     r = y.get_histrical_data(7751, datetime.now() -
-                             timedelta(days=4), datetime.now())
+                             timedelta(days=100), datetime.now())
     pprint(r)

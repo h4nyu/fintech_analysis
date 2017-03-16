@@ -9,9 +9,9 @@ if __name__ == "__main__":
     # read training dataset
 
     file_path_list = []
-    for i in range(1, 45):
+    for i in range(0, 5):
         file_path_list.append(
-            '~/fintech_tutorial/dataset/datadsq8/{0}.csv'.format(i))
+            '~/fintech_tutorial/dataset/datahzw8/{0}.csv'.format(i))
 
     x_start_col = 2
     x_end_col = 9
@@ -25,6 +25,7 @@ if __name__ == "__main__":
                                      y_start_col,
                                      y_end_col)
     y_train = reader.change_to_one_hot(y_train)
+    x_train = reader.normalize(x_train)
 
     # (x_train, y_train) = reader.get_time_window_dataset()
 
@@ -41,7 +42,7 @@ if __name__ == "__main__":
     neuralnet.save("model.h5")
 
     # read validation dataset
-    reader.set_paths(["~/fintech_tutorial/dataset/datadstz8/8.csv"])
+    reader.set_paths(["~/fintech_tutorial/dataset/datahzw8/5.csv"])
     (x_train, y_train) = reader.read(x_start_col,
                                      x_end_col,
                                      y_start_col,
@@ -55,3 +56,4 @@ if __name__ == "__main__":
     w = WeightVeiwer("model.h5")
     w.show_heatmap()
     w.show_bar()
+    w.show_dual_bar()

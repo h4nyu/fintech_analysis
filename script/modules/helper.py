@@ -79,10 +79,12 @@ class Reader(object):
         self.y_train_2 = np.array(y_train_2)
         return (self.x_train_2, self.y_train_2)
 
-    def normalize(self):
-        self.x_train = preprocessing.normalize(self.x_train, axis=0, norm='l2')
-        self.y_train = preprocessing.normalize(self.y_train, axis=0, norm='l2')
-        return (self.x_train, self.y_train)
+    def set_nam_values(self, col, m_value):
+        self.x_train_2
+        return (self.x_train_2, self.y_train_2)
+
+    def normalize(self, array):
+        return preprocessing.normalize(array, axis=0, norm='l2')
 
 
 class WeightVeiwer(object):
@@ -106,6 +108,18 @@ class WeightVeiwer(object):
         plt.bar(range(len(self.plotlist)), self.plotlist)
         plt.show()
 
+    def show_dual_bar(self):
+        positives = []
+        negatives = []
+        print(self.input_weights.shape)
+        for i in self.input_weights:
+            positives.append(i[i > 0].sum())
+            negatives.append(i[i < 0].sum())
+        f, axarr = plt.subplots(2)
+        axarr[0].bar(range(len(positives)), positives)
+        axarr[1].bar(range(len(negatives)), negatives)
+        plt.show()
+
     def show_times(self, row, col):
         self.times = self.plotlist.reshape(row, col)
 
@@ -117,23 +131,3 @@ class WeightVeiwer(object):
         sum_times = np.sum(self.times, axis=0)
         plt.bar(range(len(sum_times)), sum_times)
         plt.show()
-
-
-if __name__ == "__main__":
-    file_path_list = []
-    for i in range(1):
-        file_path_list.append(
-            '~/fintech_tutorial/dataset/datadsq8/{0}.csv'.format(i))
-
-    x_start_col = 2
-    x_end_col = 9
-    y_start_col = 1
-    y_end_col = 1
-
-    reader = Reader()
-    reader.set_paths(file_path_list)
-    (x_train, y_train) = reader.read(x_start_col,
-                                     x_end_col,
-                                     y_start_col,
-                                     y_end_col)
-    pprint(reader.change_to_one_hot(y_train))
