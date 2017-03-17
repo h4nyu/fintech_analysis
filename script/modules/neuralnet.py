@@ -72,7 +72,7 @@ class NeuralNet(object):
                            metrics=['categorical_accuracy'])
 
     def fit(self, batch_size):
-        self.early_stopping = EarlyStopping(patience=3, verbose=0)
+        self.early_stopping = EarlyStopping(patience=2, verbose=0)
         self.history = self.model.fit(self.x_train,
                                       self.y_train,
                                       nb_epoch=2000,

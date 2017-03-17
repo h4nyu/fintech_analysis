@@ -9,12 +9,12 @@ if __name__ == "__main__":
     # read training dataset
 
     file_path_list = []
-    for i in range(0, 4):
+    for i in range(0, 3):
         file_path_list.append(
-            '~/fintech_tutorial/dataset/datahzw8/{0}.csv'.format(i))
+            '~/fintech_tutorial/dataset/datajf10ud/{0}.csv'.format(i))
 
     x_start_col = 2
-    x_end_col = 9
+    x_end_col = 11
     y_start_col = 1
     y_end_col = 1
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     # set model
     neuralnet = NeuralNet()
     neuralnet.set_dataset(x_train=x_train, y_train=y_train)
-    neuralnet.build_model(layer_num=4, l1=0.01)
+    neuralnet.build_model(layer_num=4, l1=0.5)
 
     # train
     neuralnet.fit(batch_size=3)
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     neuralnet.save("model.h5")
 
     # read validation dataset
-    reader.set_paths(["~/fintech_tutorial/dataset/datahzw8/5.csv"])
+    reader.set_paths(["~/fintech_tutorial/dataset/datajf10ud/3.csv"])
     (x_train, y_train) = reader.read(x_start_col,
                                      x_end_col,
                                      y_start_col,
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     # veiw weights
     w = WeightVeiwer("model.h5")
-    w.set_col_names(['alpha', 'sharp', 'col', 'col', 'co', 'c', 'a'])
+    w.set_col_names(['sharpe', 'alpha', 'beta', 'sortino', 'treynor', 'volo', 'stockrec','maxy','mktrelated','mktvol'])
     w.show_abs_bar()
     w.show_sum_bar()
     w.show_pn_bar()
