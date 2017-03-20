@@ -9,10 +9,14 @@ from keras.layers import Activation
 from keras.optimizers import RMSprop
 from keras.models import model_from_json
 from keras.regularizers import l2
+from keras.objectives import mean_squared_error
 # from keras.regularizers import l1
 from keras.callbacks import EarlyStopping
 import numpy as np
 import matplotlib.pyplot as plt
+from . import errors
+from keras import backend as K
+from keras import metrics
 
 
 class NeuralNet(object):
@@ -44,43 +48,35 @@ class NeuralNet(object):
         self.model = model_from_json(model_path)
         self.model.load_weights(weight_path)
 
-    def build_model(self, layer_num=3):
-        layer_nodes = list(np.linspace(
-            self.input_dim, self.output_dim, layer_num + 1))
-        print(layer_nodes)
-
+    def build_model(self,  layer_num=3, l1=0.01):
         self.model = Sequential()
+        self.model.add(Dense(int(self.input_dim),
+                             W_regularizer=l2(l1),
+                             input_shape=(self.input_dim,)))
 
-        self.model.add(Dense(int(layer_nodes[1]),
-                             W_regularizer=l2(0.01),
-                             input_shape=(int(layer_nodes[0]),)))
         self.model.add(Activation("linear"))
 
-        layer_nodes.pop(0)
-        layer_nodes.pop(0)
-        layer_nodes.pop(len(layer_nodes) - 1)
-
-        for dim in layer_nodes:
-            self.model.add(Dense(int(dim)))
-            self.model.add(Activation("softsign"))
+        for i in range(layer_num - 1):
+            self.model.add(Dense(self.input_dim))
+            self.model.add(Activation("relu"))
 
         self.model.add(Dense(int(self.output_dim)))
-        self.model.add(Activation("linear"))
+        self.model.add(Activation("sigmoid"))
 
         self.model.summary()
 
         # sgd = SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True)
-        opt = RMSprop(lr=0.001, rho=0.9, epsilon=1e-08, decay=0.0)
+        opt = RMSprop(lr=0.0005, rho=0.9, epsilon=1e-08, decay=0.0)
 
-        self.model.compile(loss="mse", optimizer=opt,
-                           metrics=['mse'])
+        self.model.compile(loss="categorical_crossentropy", optimizer=opt,
+                           metrics=['categorical_accuracy'])
 
-    def fit(self):
-        self.early_stopping = EarlyStopping(patience=3, verbose=0)
+    def fit(self, batch_size):
+        self.early_stopping = EarlyStopping(patience=2, verbose=0)
         self.history = self.model.fit(self.x_train,
                                       self.y_train,
                                       nb_epoch=2000,
-                                      batch_size=2,
+                                      batch_size=batch_size,
                                       validation_split=0.3,
                                       verbose=2,
                                       callbacks=[self.early_stopping])
@@ -94,9 +90,25 @@ class NeuralNet(object):
         return self.model.predict(x_train)
 
     def validate(self, x_train, y_train):
-        for ans, pred in zip(y_train, self.predict(x_train)):
-            print("ans: {0},\t predict:{1}".format(ans[0], pred[0]))
+        preds = self.predict(x_train)
+        answers = y_train
 
+        for ans, pred in zip(answers, preds):
+            row = "ans: \t{0: 3.3f}, predict: \t{1: 3.3f}, diff:\t{2: 3.3f}"
+            print(row.format(ans[0],
+                             pred[0],
+                             pred[0] - ans[0]))
 
-if __name__ == "__main__":
-    neuralnet = NeuralNet()
+        ans_t = answers.reshape(answers.shape[1], answers.shape[0])
+        pred_t = preds.reshape(preds.shape[1], preds.shape[0])
+
+        mse = K.eval(mean_squared_error(ans_t, pred_t))
+        print("mean squared error is {0}".format(mse))
+
+    def validate_category(self, x_train, y_train):
+        preds = self.predict(x_train)
+        result = [np.equal(np.argmax(pred), np.argmax(ans))
+                  for pred, ans in zip(preds, y_train)]
+        for ans, pred in zip(y_train, preds):
+            print(np.argmax(ans), np.argmax(pred))
+        print(np.mean(result))
