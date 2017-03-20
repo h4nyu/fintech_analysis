@@ -11,7 +11,7 @@ if __name__ == "__main__":
     file_path_list = []
     for i in range(0, 3):
         file_path_list.append(
-            '~/fintech_tutorial/dataset/datajf10ud/{0}.csv'.format(i))
+            '~/fintech_tutorial/dataset/datajf101/{0}.csv'.format(i))
 
     x_start_col = 2
     x_end_col = 11
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     neuralnet.save("model.h5")
 
     # read validation dataset
-    reader.set_paths(["~/fintech_tutorial/dataset/datajf10ud/3.csv"])
+    reader.set_paths(["~/fintech_tutorial/dataset/datajf101/3.csv"])
     (x_train, y_train) = reader.read(x_start_col,
                                      x_end_col,
                                      y_start_col,
@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     # veiw weights
     w = WeightVeiwer("model.h5")
-    w.set_col_names(['sharpe', 'alpha', 'beta', 'sortino', 'treynor', 'volo', 'stockrec','maxy','mktrelated','mktvol'])
+    w.set_col_names(['sharpe', 'alpha', 'beta', 'sortino', 'treynor', 'volo', 'stockrec', 'maxy', 'mktrelated', 'mktvol'])
     w.show_abs_bar()
     w.show_sum_bar()
     w.show_pn_bar()
