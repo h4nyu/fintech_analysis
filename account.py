@@ -19,9 +19,8 @@ class Account(object):
             comm = 1000
         if _price * _amount > 1000000:
             comm + _price * _amount * 0.001
-        print(comm)
         self.asset -= _price * _amount + comm
-    def sell(self, _price ,_amount):
+    def sell(self, _price , _amount):
         if _price * _amount <= 100000:
             comm = 100
         if _price * _amount <= 200000:
