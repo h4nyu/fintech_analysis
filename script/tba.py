@@ -21,7 +21,8 @@ class Threat(object):
         if cycle == 0:
             return value
         value = value - self.f(value) / self.df(value)
-        self.newton(value, cycle - 1)
+        return self.newton(value, cycle - 1)
+
 
 if __name__ == '__main__':
     usd = Threat(120, 100)
