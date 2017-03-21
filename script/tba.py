@@ -15,17 +15,15 @@ class Threat(object):
         return float(x) - np.log((float(self.emax) / float(self.emin)) - 1) + np.log(x - 1)
 
     def df(self, x):
-        return 1 + 1 / (x - 1)
+        return x / (x - 1)
 
-    def newton(self):
-        return self._newton(self.f, self.df, 2, 3)
-
-    def _newton(self, f, df, a0, n):
-        if n == 0:
-            return a0
-        a = self._newton(f, df, a0, n - 1)
-        return a - float(f(a)) / df(a)
+    def newton(self, value, cycle):
+        if cycle == 0:
+            return value
+        value = value - self.f(value) / self.df(value)
+        self.newton(value, cycle - 1)
 
 if __name__ == '__main__':
     usd = Threat(120, 100)
-    print(usd.newton())
+    value = usd.newton(1.15, 5)
+    print(value)
