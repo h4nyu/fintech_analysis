@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <link rel="stylesheet" href="github.css">
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h1 id="概要">概要</h1>
+<p>Threat-based algorithmは一方向通貨交換問題の最適なアルゴリズムとして知られている</p>
+<h1 id="メンバ変数">メンバ変数</h1>
+<p>クラス内で使用される変数について説明する<br />
+1. <code>asset</code><br />
+株式資本<br />
+2. <code>init</code><br />
+初期資産(利益を計算するためだけに使う)<br />
+3. <code>emax</code><br />
+想定される手続き期間内の最高値<br />
+4. <code>emin</code><br />
+想定される手続き期間内の最低値<br />
+5. <code>buy</code><br />
+1単位あたりの単価<br />
+6. <code>vmax</code><br />
+期間内の最高値(初期値は購入値としている)<br />
+7. <code>balance</code><br />
+現金資本(初期値は0)<br />
+8. <code>ratio</code><br />
+本アルゴリズムで使う比率r<br />
+ニュートン法により求める</p>
+<h1 id="コンストラクタ">コンストラクタ</h1>
+<p><code>__init__(self, _emax, _emin, _asset, _buy)</code><br />
+1. <code>_emax</code><br />
+想定される手続き期間内の最高値<br />
+2. <code>_emin</code><br />
+想定される手続き期間内の最低値<br />
+3. <code>_asset</code><br />
+購入する量<br />
+4. <code>_buy</code><br />
+1単位あたりの単価</p>
+<h1 id="メソッド">メソッド</h1>
+<ol type="1">
+<li><code>input(self, _current)</code><br />
+現在の値段(_current)を入力する<br />
+その値段が最高値を更新した場合にアルゴリズムに基づいて売買取引を行う
+<ol type="1">
+<li><code>opt</code><br />
+最適オフラインアルゴリズムの資産</li>
+<li><code>compratio</code><br />
+(現時点での)競合</li>
+<li><code>benefit</code><br />
+初期購入値(buy)から見た利益</li>
+<li><code>total</code><br />
+現金資本と現時点での株式資本の合計</li>
+</ol></li>
+<li><p><code>f(self, x)</code><br />
+ニュートン法で解を求めたい関数(変更不要)</p></li>
+<li><p><code>df(self, x)</code><br />
+ニュートン法で解を求めたい関数の第一導関数(変更不要)</p></li>
+<li><p><code>newton(self, value, cycle)</code><br />
+ニュートン法でvalueからcycle回近傍を用いて解を求める<br />
+5回程度あればかなり良い精度が得られる</p></li>
+</ol>
+</body>
+</html>
