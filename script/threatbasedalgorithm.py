@@ -8,8 +8,7 @@ class Threat(object):
         self.asset = self.init = _asset
         self.emax = _emax
         self.emin = _emin
-        self.buy = self.vmax = _buy
-        self.vmin = 0
+        self.buy = self.vmax = self.vmin = _buy
         self.balance = 0
         self.ratio = self.newton(1.15, 5)
 
@@ -24,13 +23,22 @@ class Threat(object):
                 # 最適オフラインアルゴリズムの利益
                 opt =  self.vmax * self.init
                 # 現時点での競合比
-                compratio = np.round(opt / (self.balance + self.asset * self.vmax), 3)
+                self.compratio = np.round(opt / (self.balance + self.asset * self.vmax), 3)
                 # 資産
                 total = self.balance + self.asset * self.vmax
                 # 利益
                 benefit = total - self.buy * self.init
                 # print("SELL", sell)
-                print(sell, self.asset, self.balance, compratio, benefit)
+                # print(sell, self.asset, self.balance, compratio, benefit)
+        if _current < self.vmin:
+            self.vmin = _current
+
+    def end(self, _current):
+        opt = self.vmax * self.init
+        total = self.balance + self.asset * _current
+        benefit = total - self.buy * self.init
+        print("MAX=",self.vmax,"MIN=",self.vmin)
+        print("OPT=",opt, "ALG=",total, "CR=",self.compratio, "BENEFIT=",benefit)
 
     def f(self, x):
         return float(x) - np.log((float(self.emax) / float(self.emin)) - 1) + np.log(x - 1)
@@ -43,11 +51,3 @@ class Threat(object):
             return value
         value = value - self.f(value) / self.df(value)
         return self.newton(value, cycle - 1)
-
-# DEBUG STATUS
-if __name__ == '__main__':
-    usd = Threat(120, 100, 10000, 110)
-    usd.input(110)
-    usd.input(111)
-    usd.input(112)
-    usd.input(113)
