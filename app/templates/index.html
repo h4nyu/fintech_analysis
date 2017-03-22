@@ -3,6 +3,9 @@
     <title>{{ arg0 }} - microblog</title>
   </head>
   <body>
-      <h1>Hello, {{ arg1.subarg0 }}!</h1>
+    <h1>Hello, {{ title }}!</h1>
+    {% for user in users %}
+    <div><p>{{ user.name }} says: <b>{{ user.password }}</b></p></div>
+    {% endfor %}
   </body>
 </html>
