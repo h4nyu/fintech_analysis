@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .neuralnet import *
-from .helper import *
-from .errors import *
+from modules.neuralnet import *
+from modules.helper import *
+from modules.errors import *
+from modules.analyzer import Analyzer

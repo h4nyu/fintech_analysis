@@ -7,7 +7,6 @@ import seaborn as sns
 import pandas as pd
 from sklearn import preprocessing
 from keras.utils import np_utils
-from pprint import pprint
 sns.set()
 
 
@@ -57,11 +56,7 @@ class Reader(object):
         return (self.x_train, self.y_train)
 
     def change_to_one_hot(self, y_train):
-        max_num = int(np.max(y_train))
-        min_num = int(np.min(y_train))
-        span = max_num - min_num
         y_int_train = np.array([int(i > 0) for i in y_train])
-
         return np_utils.to_categorical(y_int_train)
 
     def get_time_window_dataset(self):
@@ -93,47 +88,51 @@ class WeightVeiwer(object):
 
     def __init__(self, weight_path):
         self.model = load_model(weight_path)
-        self.input_weights = self.model.get_weights()[0]
+        self.weights = self.model.get_weights()[0]
 
     def show_heatmap(self):
-        sns.heatmap(self.input_weights)
+        sns.heatmap(self.weights)
         plt.show()
 
     def set_col_names(self, array):
         self.col_names = list(array)
-        if len(array) < len(self.input_weights[0]):
-            for i in range(len(self.input_weights[0]) - len(array)):
+        if len(array) < len(self.weights):
+            for i in range(len(self.weights) - len(array)):
                 self.col_names.append("")
-        self.col_names = self.col_names[:len(self.input_weights[0])]
+        self.col_names = self.col_names[:len(self.weights)]
 
     def show_abs_bar(self):
         plotlist = []
-        for item in self.input_weights:
+        for item in self.weights:
             plotlist.append(np.abs(item).sum())
         print("---abs,sum---")
         print(plotlist)
         print("---abs,sum---")
+        x = range(len(self.col_names))
         f, axarr = plt.subplots()
-        axarr.bar(range(len(plotlist)), plotlist)
-        axarr.set_xticklabels(self.col_names)
+        axarr.bar(x, plotlist)
+        axarr.set_xticks(x)
+        axarr.set_xticklabels(labels=self.col_names)
         plt.show()
 
     def show_sum_bar(self):
         plotlist = []
-        for item in self.model.get_weights()[0]:
+        for item in self.weights:
             plotlist.append(item.sum())
         print("---sum---")
         print(plotlist)
         print("---sum---")
+        x = range(len(plotlist))
         f, axarr = plt.subplots(1)
-        axarr.bar(range(len(plotlist)), plotlist)
-        axarr.set_xticklabels(self.col_names)
+        axarr.bar(x, plotlist)
+        axarr.set_xticks(x)
+        axarr.set_xticklabels(labels=self.col_names)
         plt.show()
 
     def show_pn_bar(self):
         positives = []
         negatives = []
-        print(self.input_weights.shape)
+        print(self.weights.shape)
         for i in self.input_weights:
             positives.append(i[i > 0].sum())
             negatives.append(i[i < 0].sum())
@@ -144,10 +143,13 @@ class WeightVeiwer(object):
         print("---negatives,sum---")
         print(negatives)
         print("---negatives,sum---")
+        x = range(len(plotlist))
         f, axarr = plt.subplots(2)
-        axarr[0].bar(range(len(positives)), positives)
+        axarr[0].bar(x, positives)
+        axarr[0].set_xticks(x)
         axarr[0].set_xticklabels(self.col_names)
-        axarr[1].bar(range(len(negatives)), negatives)
+        axarr[1].bar(x, negatives)
+        axarr[1].set_xticks(x)
         axarr[1].set_xticklabels(self.col_names)
         plt.show()
 
@@ -161,3 +163,20 @@ class WeightVeiwer(object):
         sum_times = np.sum(self.times, axis=0)
         plt.bar(range(len(sum_times)), sum_times)
         plt.show()
+
+
+class WeightsVeiwer(WeightVeiwer):
+
+    """Docstring for WeightVeiwer. """
+
+    def __init__(self, file_paths):
+        self.file_paths = file_paths
+        self.models = []
+        for path in self.file_paths:
+            self.models.append(load_model(path))
+
+        self.input_weights_array = []
+        for model in self.models:
+            self.input_weights_array.append(model.get_weights()[0])
+        self.input_weights_array = np.array(self.input_weights_array)
+        self.weights = np.mean(self.input_weights_array, axis=0)

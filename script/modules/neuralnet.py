@@ -61,7 +61,7 @@ class NeuralNet(object):
             self.model.add(Activation("relu"))
 
         self.model.add(Dense(int(self.output_dim)))
-        self.model.add(Activation("sigmoid"))
+        self.model.add(Activation("softmax"))
 
         self.model.summary()
 
@@ -78,13 +78,22 @@ class NeuralNet(object):
                                       nb_epoch=2000,
                                       batch_size=batch_size,
                                       validation_split=0.3,
-                                      verbose=2,
+                                      verbose=0,
                                       callbacks=[self.early_stopping])
+        socre = self.history.history['val_categorical_accuracy'][-1]
+        print('accuracy is {0}'.format(socre))
+        return socre
 
     def show_graph(self):
         plt.plot(self.history.history['loss'])
         plt.plot(self.history.history['val_loss'])
         plt.show()
+
+    def save_graph(self, path):
+        plt.plot(self.history.history['loss'])
+        plt.plot(self.history.history['val_loss'])
+        plt.savefig(path)
+        plt.gcf().clear()
 
     def predict(self, x_train):
         return self.model.predict(x_train)
