@@ -1,11 +1,7 @@
-<html>
-  <head>
-    <title>{{ arg0 }} - microblog</title>
-  </head>
-  <body>
-    <h1>Hello, {{ title }}!</h1>
+{% extends "base.html" %}
+{% block content %}
     {% for user in users %}
     <div><p>{{ user.name }} says: <b>{{ user.password }}</b></p></div>
+    <script src={{ url_for('static', filename='main.js') }}></script>
     {% endfor %}
-  </body>
-</html>
+{% endblock %}
