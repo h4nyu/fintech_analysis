@@ -40,7 +40,7 @@ class Analyzer(object):
         for i in range(num):
             score = self.model.fit(batch_size=3)
             if score > threshold:
-                model_path = 'h5/traning_model_{0}.h5'.format(i)
+                model_path = 'traning_model_{0}.h5'.format(i)
                 self.model_paths.append(model_path)
                 self.model.save(model_path)
                 print('save model {0}'.format(model_path))

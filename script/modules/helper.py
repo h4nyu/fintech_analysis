@@ -143,7 +143,7 @@ class WeightVeiwer(object):
         print("---negatives,sum---")
         print(negatives)
         print("---negatives,sum---")
-        x = range(len(plotlist))
+        x = range(len(positives))
         f, axarr = plt.subplots(2)
         axarr[0].bar(x, positives)
         axarr[0].set_xticks(x)

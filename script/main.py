@@ -17,8 +17,8 @@ if __name__ == "__main__":
                       y_start_col=1,
                       y_end_col=1
                       )
-    a.training(num=50,
-               threshold=0.9,
+    a.training(num=20,
+               threshold=0.80,
                file_paths=file_paths
                )
 
@@ -29,4 +29,3 @@ if __name__ == "__main__":
     w.set_col_names(['sharpe', 'alpha', 'beta', 'sortino', 'treynor',
                      'volo', 'stockrec', 'maxy', 'mktrelated', 'mktvol'])
     w.show_abs_bar()
-    w.show_sum_bar()
