@@ -9,12 +9,12 @@ if __name__ == "__main__":
     # read training dataset
 
     file_path_list = []
-    for i in range(0, 3):
+    for i in range(0, 4):
         file_path_list.append(
-            '~/fintech_tutorial/dataset/datajf101/{0}.csv'.format(i))
+            '~/fintech_tutorial/dataset/datajf8/{0}.csv'.format(i))
 
     x_start_col = 2
-    x_end_col = 11
+    x_end_col = 9
     y_start_col = 1
     y_end_col = 1
 
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     neuralnet.save("model.h5")
 
     # read validation dataset
-    reader.set_paths(["~/fintech_tutorial/dataset/datajf101/3.csv"])
+    reader.set_paths(["~/fintech_tutorial/dataset/datajf8/4.csv"])
     (x_train, y_train) = reader.read(x_start_col,
                                      x_end_col,
                                      y_start_col,
