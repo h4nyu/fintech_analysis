@@ -15,5 +15,8 @@
     "app/static/bower_components",
     "test",
     "tests"
-  ]
+  ],
+  "dependencies": {
+    "d3": "^4.7.3"
+  }
 }
