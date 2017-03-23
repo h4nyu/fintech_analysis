@@ -54,11 +54,11 @@ class NeuralNet(object):
                              W_regularizer=l2(l1),
                              input_shape=(self.input_dim,)))
 
-        self.model.add(Activation("linear"))
+        self.model.add(Activation("tanh"))
 
         for i in range(layer_num - 1):
             self.model.add(Dense(self.input_dim))
-            self.model.add(Activation("relu"))
+            self.model.add(Activation("tanh"))
 
         self.model.add(Dense(int(self.output_dim)))
         self.model.add(Activation("softmax"))
