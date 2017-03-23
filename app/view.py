@@ -18,14 +18,27 @@ class User(object):
         self.password = password
 
 
+class Waveform(object):
+
+    """Docstring for Waveform. """
+
+    def __init__(self, data):
+        """TODO: to be defined1. """
+        self.value = data
+        self.timestamp = data
+
+    def get_json(self):
+        pass
+
+
 @app.route('/')
 @app.route('/index')
 def index():
     title = 'my_title'
-    users = []
-    users.append(User('aaa', 'bbb'))
-    users.append(User('ccc', 'ddd'))
+    waveforms = []
+    for i in range(100):
+        waveforms.append(Waveform([i] * 10).__dict__)
     return render_template('index.html',
                            title=title,
-                           users=list_to_json(users)
+                           waveforms=waveforms
                            )

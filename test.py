@@ -16,10 +16,22 @@ class User(object):
         self.password = password
 
 
+class Waveform(object):
+
+    """Docstring for Waveform. """
+
+    def __init__(self, data):
+        """TODO: to be defined1. """
+        self.value = data
+        self.timestamp = data
+
+    def get_json(self):
+        pass
+
 if __name__ == "__main__":
 
-    users = []
-    users.append(User('aaa', 'bbb'))
-    users.append(User('ccc', 'ddd'))
-    users = list(map(lambda x: x.__dict__, users))
-    print(users)
+    waveforms = []
+    for i in range(10):
+        waveforms.append(Waveform([i] * 10))
+    waveforms = list(map(lambda x: x.__dict__, waveforms))
+    print(waveforms)

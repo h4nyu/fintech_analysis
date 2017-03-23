@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-    {% for user in users %}
-    <div><p>{{ user.name }} says: <b>{{ user.password }}</b></p></div>
+    {% for waveform in waveforms %}
+    <p>
+      var data = {{ waveform }};
+    </p>
     <script src={{ url_for('static', filename='main.js') }}></script>
     {% endfor %}
 {% endblock %}
