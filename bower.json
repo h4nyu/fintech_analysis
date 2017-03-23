@@ -1,0 +1,19 @@
+{
+  "name": "Xinyuan Yao",
+  "authors": [
+    "x1nyuan <yao.ntno@gmail.com>"
+  ],
+  "description": "flask_tutorial",
+  "main": "run.py",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "app/static/bower_components",
+    "test",
+    "tests"
+  ]
+}
