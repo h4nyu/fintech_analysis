@@ -35,9 +35,10 @@ class Analyzer(object):
         self.traing_file_paths = file_paths
         self.__read()
         self.model.set_dataset(self.x_train, self.y_train)
-        self.model.build_model(layer_num=4, l1=0.5)
+        self.model.build_model(layer_num=4, l1=0.5, sammary=True)
         self.model_paths = []
         for i in range(num):
+            self.model.build_model(layer_num=4, l1=0.5)
             score = self.model.fit(batch_size=3)
             if score > threshold:
                 model_path = 'traning_model_{0}.h5'.format(i)

@@ -48,7 +48,7 @@ class NeuralNet(object):
         self.model = model_from_json(model_path)
         self.model.load_weights(weight_path)
 
-    def build_model(self,  layer_num=3, l1=0.01):
+    def build_model(self,  layer_num=3, l1=0.01, sammary=False):
         self.model = Sequential()
         self.model.add(Dense(int(self.input_dim),
                              W_regularizer=l2(l1),
@@ -63,7 +63,8 @@ class NeuralNet(object):
         self.model.add(Dense(int(self.output_dim)))
         self.model.add(Activation("softmax"))
 
-        self.model.summary()
+        if sammary is True:
+            self.model.summary()
 
         # sgd = SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True)
         opt = RMSprop(lr=0.0005, rho=0.9, epsilon=1e-08, decay=0.0)
