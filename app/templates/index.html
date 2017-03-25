@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+    {% for waveform in waveforms %}
+    <p>
+      var data = {{ waveform }};
+    </p>
+    <script src={{ url_for('static', filename='main.js') }}></script>
+    {% endfor %}
+{% endblock %}

@@ -109,7 +109,7 @@ class GCollector(Dao):
                            symbol,
                            start_time,
                            end_date,
-                           interval
+                           interval,
                            exchange_code='TYO'
                            ):
         if interval < 60:
