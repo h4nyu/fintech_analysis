@@ -9,8 +9,8 @@ from keras.layers import Activation
 from keras.optimizers import RMSprop
 from keras.models import model_from_json
 from keras.regularizers import l2
+from keras.regularizers import l1
 from keras.objectives import mean_squared_error
-# from keras.regularizers import l1
 from keras.callbacks import EarlyStopping
 import numpy as np
 import matplotlib.pyplot as plt
@@ -48,10 +48,10 @@ class NeuralNet(object):
         self.model = model_from_json(model_path)
         self.model.load_weights(weight_path)
 
-    def build_model(self,  layer_num=3, l1=0.01, sammary=False):
+    def build_model(self,  layer_num=3, l=0.01, sammary=False):
         self.model = Sequential()
         self.model.add(Dense(int(self.input_dim),
-                             W_regularizer=l2(l1),
+                             W_regularizer=l1(l),
                              input_shape=(self.input_dim,)))
 
         self.model.add(Activation("tanh"))
