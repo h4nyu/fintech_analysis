@@ -17,6 +17,7 @@ import matplotlib.pyplot as plt
 from . import errors
 from keras import backend as K
 from keras import metrics
+from keras import initializers
 
 
 class NeuralNet(object):
@@ -51,6 +52,8 @@ class NeuralNet(object):
     def build_model(self,  layer_num=3, l=0.01, sammary=False):
         self.model = Sequential()
         self.model.add(Dense(int(self.input_dim),
+                             kernel_initializer=initializers.Constant(
+                                 value=0.5),
                              W_regularizer=l1(l),
                              input_shape=(self.input_dim,)))
 

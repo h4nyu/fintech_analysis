@@ -31,15 +31,15 @@ class Analyzer(object):
         self.y_train = self.reader.change_to_one_hot(y)
         self.x_train = self.reader.normalize(x)
 
-    def training(self, num, threshold, file_paths, **kwargs):
+    def training(self, num, threshold, file_paths, batch_size=10, l=0.05,  **kwargs):
         self.traing_file_paths = file_paths
         self.__read()
         self.model.set_dataset(self.x_train, self.y_train)
-        self.model.build_model(layer_num=4, l=0.5, sammary=True)
+        self.model.build_model(layer_num=4, l=l, sammary=True)
         self.model_paths = []
         for i in range(num):
-            self.model.build_model(layer_num=4, l=0.5)
-            score = self.model.fit(batch_size=3)
+            self.model.build_model(layer_num=4, l=l)
+            score = self.model.fit(batch_size=batch_size)
             if score > threshold:
                 model_path = 'traning_model_{0}.h5'.format(i)
                 self.model_paths.append(model_path)

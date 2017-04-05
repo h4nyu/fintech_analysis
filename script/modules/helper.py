@@ -88,6 +88,9 @@ class WeightVeiwer(object):
 
     def __init__(self, weight_path):
         self.model = load_model(weight_path)
+        print(self.model)
+        if(self.model is None):
+            raise ValueError("model not found")
         self.weights = self.model.get_weights()[0]
 
     def show_heatmap(self):
@@ -171,6 +174,8 @@ class WeightsVeiwer(WeightVeiwer):
 
     def __init__(self, file_paths):
         self.file_paths = file_paths
+        if(len(file_paths) == 0):
+            raise ValueError("no file path")
         self.models = []
         for path in self.file_paths:
             self.models.append(load_model(path))

@@ -8,21 +8,22 @@ if __name__ == "__main__":
     # read training dataset
 
     file_paths = []
-    for i in range(0, 5):
+    for i in range(0, 28):
         file_paths.append(
-            '~/fintech_tutorial/dataset/datahzw8/{0}.csv'.format(i))
+            '~/fintech_tutorial/dataset/datazq8/{0}.csv'.format(i))
     a = Analyzer()
     a.csv_file_config(x_start_col=2,
                       x_end_col=9,
                       y_start_col=1,
                       y_end_col=1
                       )
-    a.training(num=30,
-               threshold=0.85,
+    a.training(num=10,
+               threshold=0.8,
+               batch_size=10,
                file_paths=file_paths
                )
 
-    a.validation(["~/fintech_tutorial/dataset/datahzw8/5.csv"])
+    a.validation(["~/fintech_tutorial/dataset/datazq8/29.csv"])
 
     w = WeightsVeiwer(a.model_paths)
     # w.show_heatmap()
