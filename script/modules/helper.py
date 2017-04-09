@@ -136,7 +136,7 @@ class WeightVeiwer(object):
         positives = []
         negatives = []
         print(self.weights.shape)
-        for i in self.input_weights:
+        for i in self.weights:
             positives.append(i[i > 0].sum())
             negatives.append(i[i < 0].sum())
 
