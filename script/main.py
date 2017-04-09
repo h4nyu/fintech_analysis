@@ -17,10 +17,11 @@ if __name__ == "__main__":
                       y_start_col=1,
                       y_end_col=1
                       )
-    a.training(num=10,
+    a.training(num=4,
                threshold=0.8,
                batch_size=10,
-               file_paths=file_paths
+               file_paths=file_paths,
+               lasso=0.01
                )
 
     a.validation(["~/fintech_tutorial/dataset/datazq8/29.csv"])
@@ -30,3 +31,4 @@ if __name__ == "__main__":
     w.set_col_names(['sharpe', 'alpha', 'beta', 'sortino', 'treynor',
                      'volo', 'stockrec', 'maxy'])
     w.show_abs_bar()
+    w.show_pn_bar()
