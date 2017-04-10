@@ -18,6 +18,8 @@ from . import errors
 from keras import backend as K
 from keras import metrics
 from keras import initializers
+from keras.wrappers.scikit_learn import KerasClassifier
+from sklearn.model_selection import GridSearchCV
 
 
 class NeuralNet(object):
@@ -32,6 +34,7 @@ class NeuralNet(object):
         self.input_dim = None
         self.output_dim = None
         self.size = None
+        self.early_stopping = EarlyStopping(patience=2, verbose=0)
 
     def save(self, model_path):
         self.model.save(model_path)
@@ -52,7 +55,7 @@ class NeuralNet(object):
     def build_model(self,
                     layer_num=3,
                     init_weight=0,
-                    l=0.01,
+                    lasso=0.01,
                     sammary=False,
                     **kwargs
                     ):
@@ -61,7 +64,7 @@ class NeuralNet(object):
         self.model.add(Dense(int(self.input_dim),
                              kernel_initializer=initializers.Constant(
                                  value=init_weight),
-                             W_regularizer=l1(l),
+                             W_regularizer=l1(lasso),
                              input_shape=(self.input_dim,)))
 
         self.model.add(Activation("tanh"))
@@ -76,22 +79,21 @@ class NeuralNet(object):
         if sammary is True:
             self.model.summary()
 
-        # sgd = SGD(lr=0.005, decay=1e-6, momentum=0.9, nesterov=True)
         opt = RMSprop(lr=0.0005, rho=0.9, epsilon=1e-08, decay=0.0)
 
         self.model.compile(loss="categorical_crossentropy", optimizer=opt,
-                           metrics=['categorical_accuracy'])
+                           metrics=['acc'])
+        return self.model
 
     def fit(self, batch_size):
-        self.early_stopping = EarlyStopping(patience=2, verbose=0)
         self.history = self.model.fit(self.x_train,
                                       self.y_train,
                                       nb_epoch=2000,
                                       batch_size=batch_size,
                                       validation_split=0.3,
-                                      verbose=0,
+                                      verbose=2,
                                       callbacks=[self.early_stopping])
-        socre = self.history.history['val_categorical_accuracy'][-1]
+        socre = self.history.history['acc'][-1]
         print('accuracy is {0}'.format(socre))
         return socre
 
@@ -124,6 +126,31 @@ class NeuralNet(object):
 
         mse = K.eval(mean_squared_error(ans_t, pred_t))
         print("mean squared error is {0}".format(mse))
+
+    def grid_search(self,
+                    layer_nums,
+                    batch_sizes,
+                    lassos,
+                    epochs=50,
+                    ):
+        model = KerasClassifier(build_fn=self.build_model,
+                                verbose=2,
+                                epochs=epochs
+                                )
+        param_grid = dict(layer_num=layer_nums,
+                          batch_size=batch_sizes,
+                          lasso=lassos)
+        grid = GridSearchCV(estimator=model, param_grid=param_grid)
+
+        grid_result = grid.fit(self.x_train, self.y_train)
+
+        print("Best: %f using %s" %
+              (grid_result.best_score_, grid_result.best_params_))
+        means = grid_result.cv_results_['mean_test_score']
+        stds = grid_result.cv_results_['std_test_score']
+        params = grid_result.cv_results_['params']
+        for mean, stdev, param in zip(means, stds, params):
+            print("%f (%f) with: %r" % (mean, stdev, param))
 
     def validate_category(self, x_train, y_train):
         preds = self.predict(x_train)

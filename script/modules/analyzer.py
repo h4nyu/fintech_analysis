@@ -22,8 +22,8 @@ class Analyzer(object):
         self.y_start_col = y_start_col
         self.y_end_col = y_end_col
 
-    def __read(self):
-        self.reader.set_paths(self.traing_file_paths)
+    def read(self, file_paths):
+        self.reader.set_paths(file_paths)
         (x, y) = self.reader.read(self.x_start_col,
                                   self.x_end_col,
                                   self.y_start_col,
@@ -39,11 +39,9 @@ class Analyzer(object):
                  lasso=0.05,
                  **kwargs):
 
-        self.traing_file_paths = file_paths
-        self.__read()
+        self.read(file_paths)
         self.model.set_dataset(self.x_train, self.y_train)
-        self.model.build_model(layer_num=4,
-                               l=lasso,
+        self.model.build_model(l=lasso,
                                sammary=True,
                                **kwargs
                                )
@@ -58,6 +56,11 @@ class Analyzer(object):
                 self.model.save(model_path)
                 print('save model {0}'.format(model_path))
                 # self.model.save_graph('traning_{0}.png'.format(i))
+
+    def grid_search(self, file_paths, **kwargs):
+        self.read(file_paths)
+        self.model.set_dataset(self.x_train, self.y_train)
+        self.model.grid_search(**kwargs)
 
     def validation(self, file_paths):
         self.validation_file_paths = file_paths

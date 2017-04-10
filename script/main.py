@@ -17,15 +17,20 @@ if __name__ == "__main__":
                       y_start_col=1,
                       y_end_col=1
                       )
-    a.training(num=4,
+    # a.grid_search(file_paths=file_paths,
+    #               epochs=30,
+    #               layer_nums=[4, 5],
+    #               lassos=[0.01, 0.001],
+    #               batch_sizes=[5, 10]
+    #               )
+    a.training(num=10,
                threshold=0.8,
-               batch_size=10,
+               batch_size=5,
                init_weight=0,
                file_paths=file_paths,
-               lasso=0.01
+               lasso=0.01,
+               layer_num=4
                )
-
-    a.validation(["~/fintech_tutorial/dataset/datazq8/29.csv"])
 
     w = WeightsVeiwer(a.model_paths)
     w.show_heatmap()

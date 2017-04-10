@@ -1,65 +1,46 @@
-#j/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from __future__ import print_function
-
-from sklearn import datasets
-from sklearn.model_selection import train_test_split
+from keras.models import Sequential
+from keras.layers import Dense
+from modules.neuralnet import NeuralNet
+from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import GridSearchCV
-from sklearn.metrics import classification_report
-from sklearn.svm import SVC
 
-print(__doc__)
+# Function to create model, required for KerasClassifier
 
-# Loading the Digits dataset
-digits = datasets.load_digits()
 
-# To apply an classifier on this data, we need to flatten the image, to
-# turn the data in a (samples, feature) matrix:
-n_samples = len(digits.images)
-X = digits.images.reshape((n_samples, -1))
-y = digits.target
+def create_model(optimizer='rmsprop', init='glorot_uniform'):
+    # create model
+    model = Sequential()
+    model.add(Dense(12, input_dim=8, kernel_initializer=init, activation='relu'))
+    model.add(Dense(8, kernel_initializer=init, activation='relu'))
+    model.add(Dense(1, kernel_initializer=init, activation='sigmoid'))
+    # Compile model
+    model.compile(loss='binary_crossentropy',
+                  optimizer=optimizer, metrics=['accuracy'])
+    return model
 
-# Split the dataset in two equal parts
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.5, random_state=0)
+if __name__ == "__main__":
+    factroy = NeuralNet()
 
-# Set the parameters by cross-validation
-tuned_parameters = [{'kernel': ['rbf'], 'gamma': [1e-3, 1e-4],
-                     'C': [1, 10, 100, 1000]},
-                    {'kernel': ['linear'], 'C': [1, 10, 100, 1000]}]
+    # create model
+    model = KerasClassifier(build_fn=create_model, verbose=0)
 
-scores = ['precision', 'recall']
+    optimizers = ['rmsprop', 'adam']
+    init = ['glorot_uniform', 'normal', 'uniform']
+    epochs = [50, 100, 150]
+    batches = [5, 10, 20]
+    param_grid = dict(optimizer=optimizers, epochs=epochs,
+                      batch_size=batches, init=init)
+    grid = GridSearchCV(estimator=model, param_grid=param_grid)
+    grid_result = grid.fit(X, Y)
 
-for score in scores:
-    print("# Tuning hyper-parameters for %s" % score)
-    print()
 
-    clf = GridSearchCV(SVC(C=1), tuned_parameters, cv=5,
-                       scoring='%s_macro' % score)
-    clf.fit(X_train, y_train)
-
-    print("Best parameters set found on development set:")
-    print()
-    print(clf.best_params_)
-    print()
-    print("Grid scores on development set:")
-    print()
-    means = clf.cv_results_['mean_test_score']
-    stds = clf.cv_results_['std_test_score']
-    for mean, std, params in zip(means, stds, clf.cv_results_['params']):
-        print("%0.3f (+/-%0.03f) for %r"
-              % (mean, std * 2, params))
-    print()
-
-    print("Detailed classification report:")
-    print()
-    print("The model is trained on the full development set.")
-    print("The scores are computed on the full evaluation set.")
-    print()
-    y_true, y_pred = y_test, clf.predict(X_test)
-    print(classification_report(y_true, y_pred))
-    print()
-
-# Note the problem is too easy: the hyperparameter plateau is too flat and the
-# output model is the same for precision and recall with ties in quality.
+# summarize results
+    print("Best: %f using %s" %
+          (grid_result.best_score_, grid_result.best_params_))
+    means = grid_result.cv_results_['mean_test_score']
+    stds = grid_result.cv_results_['std_test_score']
+    params = grid_result.cv_results_['params']
+    for mean, stdev, param in zip(means, stds, params):
+        print("%f (%f) with: %r" % (mean, stdev, param))
