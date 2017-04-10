@@ -49,11 +49,16 @@ class NeuralNet(object):
         self.model = model_from_json(model_path)
         self.model.load_weights(weight_path)
 
-    def build_model(self,  layer_num=3, l=0.01, sammary=False):
+    def build_model(self,
+                    layer_num=3,
+                    init_weight=0.01,
+                    l=0.01,
+                    sammary=False):
+
         self.model = Sequential()
         self.model.add(Dense(int(self.input_dim),
                              kernel_initializer=initializers.Constant(
-                                 value=0.5),
+                                 value=init_weight),
                              W_regularizer=l1(l),
                              input_shape=(self.input_dim,)))
 

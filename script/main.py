@@ -20,6 +20,7 @@ if __name__ == "__main__":
     a.training(num=4,
                threshold=0.8,
                batch_size=10,
+               init_weight=0,
                file_paths=file_paths,
                lasso=0.01
                )
@@ -27,7 +28,7 @@ if __name__ == "__main__":
     a.validation(["~/fintech_tutorial/dataset/datazq8/29.csv"])
 
     w = WeightsVeiwer(a.model_paths)
-    # w.show_heatmap()
+    w.show_heatmap()
     w.set_col_names(['sharpe', 'alpha', 'beta', 'sortino', 'treynor',
                      'volo', 'stockrec', 'maxy'])
     w.show_abs_bar()
