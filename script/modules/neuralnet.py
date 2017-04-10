@@ -51,9 +51,11 @@ class NeuralNet(object):
 
     def build_model(self,
                     layer_num=3,
-                    init_weight=0.01,
+                    init_weight=0,
                     l=0.01,
-                    sammary=False):
+                    sammary=False,
+                    **kwargs
+                    ):
 
         self.model = Sequential()
         self.model.add(Dense(int(self.input_dim),

@@ -35,7 +35,6 @@ class Analyzer(object):
                  num,
                  threshold,
                  file_paths,
-                 init_weight=0.01,
                  batch_size=10,
                  lasso=0.05,
                  **kwargs):
@@ -44,13 +43,13 @@ class Analyzer(object):
         self.__read()
         self.model.set_dataset(self.x_train, self.y_train)
         self.model.build_model(layer_num=4,
-                               init_weight=init_weight,
                                l=lasso,
-                               sammary=True)
+                               sammary=True,
+                               **kwargs
+                               )
         self.model_paths = []
         for i in range(num):
             self.model.build_model(layer_num=4,
-                                   init_weight=init_weight,
                                    l=lasso)
             score = self.model.fit(batch_size=batch_size)
             if score > threshold:
