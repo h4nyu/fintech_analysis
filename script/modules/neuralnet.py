@@ -8,8 +8,7 @@ from keras.layers import Activation
 # from keras.optimizers import SGD
 from keras.optimizers import RMSprop
 from keras.models import model_from_json
-from keras.regularizers import l2
-from keras.regularizers import l1
+from keras import regularizers
 from keras.objectives import mean_squared_error
 from keras.callbacks import EarlyStopping
 import numpy as np
@@ -64,7 +63,7 @@ class NeuralNet(object):
         self.model.add(Dense(int(self.input_dim),
                              kernel_initializer=initializers.Constant(
                                  value=init_weight),
-                             W_regularizer=l1(lasso),
+                             activity_regularizer=regularizers.l2(lasso),
                              input_shape=(self.input_dim,)))
 
         self.model.add(Activation("tanh"))
@@ -123,7 +122,6 @@ class NeuralNet(object):
 
         ans_t = answers.reshape(answers.shape[1], answers.shape[0])
         pred_t = preds.reshape(preds.shape[1], preds.shape[0])
-
         mse = K.eval(mean_squared_error(ans_t, pred_t))
         print("mean squared error is {0}".format(mse))
 

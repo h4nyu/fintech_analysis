@@ -6,7 +6,6 @@ from modules import Analyzer
 if __name__ == "__main__":
 
     # read training dataset
-
     file_paths = []
     for i in range(0, 28):
         file_paths.append(
@@ -17,12 +16,12 @@ if __name__ == "__main__":
                       y_start_col=1,
                       y_end_col=1
                       )
-    a.grid_search(file_paths=file_paths,
-                  epochs=20,
-                  layer_nums=[4, 5],
-                  lassos=[0.01, 0.001],
-                  batch_sizes=[5, 10]
-                  )
+    # a.grid_search(file_paths=file_paths,
+    #               epochs=20,
+    #               layer_nums=[4, 5],
+    #               lassos=[0.01, 0.001],
+    #               batch_sizes=[5, 10]
+    #               )
     a.training(num=10,
                threshold=0.8,
                batch_size=5,

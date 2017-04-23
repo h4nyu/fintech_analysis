@@ -55,7 +55,6 @@ class Analyzer(object):
                 self.model_paths.append(model_path)
                 self.model.save(model_path)
                 print('save model {0}'.format(model_path))
-                # self.model.save_graph('traning_{0}.png'.format(i))
 
     def grid_search(self, file_paths, **kwargs):
         self.read(file_paths)
