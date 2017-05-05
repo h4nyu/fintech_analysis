@@ -11,10 +11,8 @@ if __name__ == "__main__":
         file_paths.append(
             '~/fintech_tutorial/dataset/datazq8/{0}.csv'.format(i))
     a = Analyzer()
-    a.csv_file_config(x_start_col=2,
-                      x_end_col=9,
-                      y_start_col=1,
-                      y_end_col=1
+    a.csv_file_config(input_cols=[5, 6, 9],
+                      output_cols=[1]
                       )
     # a.grid_search(file_paths=file_paths,
     #               epochs=20,
@@ -22,7 +20,7 @@ if __name__ == "__main__":
     #               lassos=[0.01, 0.001],
     #               batch_sizes=[5, 10]
     #               )
-    a.training(num=10,
+    a.training(num=1,
                threshold=0.8,
                batch_size=5,
                init_weight=0,
@@ -30,6 +28,7 @@ if __name__ == "__main__":
                lasso=0.01,
                layer_num=4
                )
+    a.validation
 
     w = WeightsVeiwer(a.model_paths)
     w.show_heatmap()

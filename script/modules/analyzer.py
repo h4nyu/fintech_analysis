@@ -16,18 +16,13 @@ class Analyzer(object):
     def feed_trainings(self, file_paths):
         self.traing_file_paths = file_paths
 
-    def csv_file_config(self, x_start_col, x_end_col, y_start_col, y_end_col):
-        self.x_start_col = x_start_col
-        self.x_end_col = x_end_col
-        self.y_start_col = y_start_col
-        self.y_end_col = y_end_col
+    def csv_file_config(self, output_cols, input_cols):
+        self.input_cols = input_cols
+        self.output_cols = output_cols
 
     def read(self, file_paths):
         self.reader.set_paths(file_paths)
-        (x, y) = self.reader.read(self.x_start_col,
-                                  self.x_end_col,
-                                  self.y_start_col,
-                                  self.y_end_col)
+        (x, y) = self.reader.read(self.input_cols, self.output_cols)
         self.y_train = self.reader.change_to_one_hot(y)
         self.x_train = self.reader.normalize(x)
 

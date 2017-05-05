@@ -34,9 +34,10 @@ class Reader(object):
     def set_paths(self, file_path_list):
         self.file_path_list = file_path_list
 
-    def read(self, x_start_col, x_end_col, y_start_col, y_end_col):
-        x_train = np.empty((0, x_end_col - x_start_col + 1))
-        y_train = np.empty((0, y_start_col - y_end_col + 1))
+    def read(self, input_cols, output_cols):
+        x_train = np.empty((0, len(input_cols)))
+        y_train = np.empty((0, len(output_cols)))
+
         for path in self.file_path_list:
             df = pd.read_csv(path,
                              delimiter=",", header=None)
@@ -44,11 +45,11 @@ class Reader(object):
                   + path
                   + "for training")
             x_train = np.append(x_train,
-                                np.array(df.ix[0:, x_start_col:x_end_col]),
+                                np.array(df.ix[0:, input_cols]),
                                 axis=0)
 
             y_train = np.append(y_train,
-                                np.array(df.ix[0:, y_start_col:y_end_col]),
+                                np.array(df.ix[0:, output_cols]),
                                 axis=0)
 
         self.x_train = x_train
