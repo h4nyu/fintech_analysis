@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from modules import WeightsVeiwer
-from modules import Analyzer
+from fintech_analysis import WeightsVeiwer
+from fintech_analysis import Analyzer
+
 
 if __name__ == "__main__":
 
