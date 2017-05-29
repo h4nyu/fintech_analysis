@@ -8,3 +8,4 @@ seaborn
 sklearn
 h5py
 flask
+matplotlib
