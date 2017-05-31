@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from modules.helper import Reader
-from modules.neuralnet import NeuralNet
+from .helper import Reader
+from .neuralnet import NeuralNet
 
 
 class Analyzer(object):

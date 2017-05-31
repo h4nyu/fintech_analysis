@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
+import os
 from keras.models import load_model
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -34,16 +35,29 @@ class Reader(object):
     def set_paths(self, file_path_list):
         self.file_path_list = file_path_list
 
-    def read(self, input_cols, output_cols):
+    def set_dir(self, dir_path, file_type="csv"):
+        file_path_list = []
+        abspath = os.path.abspath(dir_path)
+        file_names = os.listdir(abspath)
+        for file_name in file_names:
+            root, ext = os.path.splitext(file_name)
+            if ext == ".csv":
+                file_path_list.append(os.path.join(abspath, file_name))
+        self.file_path_list = file_path_list
+        return file_path_list
+
+    def read(self, input_cols, output_cols, verbose=False):
         x_train = np.empty((0, len(input_cols)))
         y_train = np.empty((0, len(output_cols)))
 
         for path in self.file_path_list:
-            df = pd.read_csv(path,
-                             delimiter=",", header=None)
-            print("read"
-                  + path
-                  + "for training")
+            df = pd.read_csv(path, delimiter=",", header=None)
+            shape = df.shape
+            if max(input_cols) > shape[1]-1 or max(output_cols) > shape[1]-1:
+                raise ValueError("invalid col. shape is {}".format(shape))
+
+            if verbose is True:
+                print("reading..." + path)
             x_train = np.append(x_train,
                                 np.array(df.ix[0:, input_cols]),
                                 axis=0)

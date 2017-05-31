@@ -1,2 +1,8 @@
-pip
 pip-tools
+autopep8
+flake8
+pytest
+pytest-timeout
+pytest-cov
+pytest-pep8
+
