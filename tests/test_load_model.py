@@ -4,7 +4,7 @@ import pytest
 from fintech_analysis import Reader
 
 
-@pytest.fixture
+@pytest.fixture(scope='module')
 def reader():
     return Reader()
 
@@ -15,11 +15,13 @@ def reader_with_files(reader):
     return reader
 
 
-def test_load_model():
-    from fintech_analysis.models import FeatureExtractModel
-    batch_input_shape = (None, 10)
-    m = FeatureExtractModel(batch_input_shape)
-    m.summary()
+@pytest.fixture(scope='module')
+def datasets():
+    r = Reader()
+    r.set_dir("dataset/newfactor")
+    x_train, y_train = r.read(input_cols=range(2, 15), output_cols=[1])
+    return x_train, y_train
+
 
 
 def test_reader_set_dir(reader):
@@ -27,11 +29,8 @@ def test_reader_set_dir(reader):
     assert len(file_names) == 525
 
 
-def test_reader_read(reader_with_files):
-    r = reader_with_files
-    x_train, y_train = r.read(input_cols=range(2, 15), output_cols=[1])
+def test_reader_read(datasets):
+    x_train, y_train = datasets
     assert x_train.shape[1] == 13
     assert y_train.shape[1] == 1
-
-
 

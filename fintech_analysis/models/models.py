@@ -4,6 +4,17 @@ import keras.backend as K
 from keras.models import Model
 from keras.utils import plot_model
 from keras.layers import InputLayer
+from keras import regularizers
+from keras.layers.core import Flatten, Dense, Dropout
+from keras.layers import Input
+from keras.layers import Reshape
+from keras.layers import Activation
+from keras.layers.convolutional import Conv2D
+from keras.layers.convolutional import Conv2DTranspose
+from keras.layers.local import LocallyConnected2D
+from keras.layers.convolutional import MaxPooling2D
+from keras.layers.convolutional import ZeroPadding2D
+from keras.layers.convolutional import UpSampling2D
 
 
 class KerasModel(Model):
@@ -23,8 +34,14 @@ class KerasModel(Model):
 
 
 class FeatureExtractModel(KerasModel):
-    def __init__(self, batch_input_shape):
+    def __init__(self, batch_input_shape, class_num):
         """TODO: to be defined1. """
         inputs = InputLayer(batch_input_shape=batch_input_shape).output
-
-        super().__init__(inputs=[inputs], outputs=inputs)
+        hidden = Dense(units=10,
+                       activation='linear',
+                       activity_regularizer=regularizers.l2(0.01))(inputs)
+        hidden = Dense(units=10, activation='linear')(hidden)
+        hidden = Dense(units=10, activation='linear')(hidden)
+        hidden = Dense(units=10, activation='linear')(hidden)
+        outputs = Dense(units=class_num, activation='softmax')(hidden)
+        super().__init__(inputs=[inputs], outputs=outputs)
