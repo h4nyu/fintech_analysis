@@ -15,6 +15,7 @@ from keras.layers.local import LocallyConnected2D
 from keras.layers.convolutional import MaxPooling2D
 from keras.layers.convolutional import ZeroPadding2D
 from keras.layers.convolutional import UpSampling2D
+from keras.layers.local import LocallyConnected1D
 
 
 class KerasModel(Model):
@@ -37,11 +38,12 @@ class FeatureExtractModel(KerasModel):
     def __init__(self, batch_input_shape, class_num):
         """TODO: to be defined1. """
         inputs = InputLayer(batch_input_shape=batch_input_shape).output
-        hidden = Dense(units=10,
-                       activation='linear',
-                       activity_regularizer=regularizers.l2(0.01))(inputs)
-        hidden = Dense(units=10, activation='linear')(hidden)
-        hidden = Dense(units=10, activation='linear')(hidden)
-        hidden = Dense(units=10, activation='linear')(hidden)
-        outputs = Dense(units=class_num, activation='softmax')(hidden)
+        hidden = LocallyConnected1D(1,
+                                    filter_length=1,
+                                    activation='linear',
+                                    activity_regularizer=regularizers.l2(0.01))(inputs)
+        hidden = Flatten()(hidden)
+        hidden = Dense(units=10, activation='tanh')(hidden)
+        hidden = Dense(units=10, activation='tanh')(hidden)
+        outputs = Dense(units=class_num, activation='linear')(hidden)
         super().__init__(inputs=[inputs], outputs=outputs)
