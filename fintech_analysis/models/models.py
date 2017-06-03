@@ -9,6 +9,7 @@ from keras.layers.core import Flatten, Dense, Dropout
 from keras.layers import Input
 from keras.layers import Reshape
 from keras.layers import Activation
+from keras.layers.advanced_activations import LeakyReLU
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import Conv2DTranspose
 from keras.layers.local import LocallyConnected2D
@@ -43,7 +44,12 @@ class FeatureExtractModel(KerasModel):
                                     activation='linear',
                                     activity_regularizer=regularizers.l2(0.01))(inputs)
         hidden = Flatten()(hidden)
-        hidden = Dense(units=10, activation='tanh')(hidden)
-        hidden = Dense(units=10, activation='tanh')(hidden)
-        outputs = Dense(units=class_num, activation='linear')(hidden)
+        hidden = Dense(units=10)(hidden)
+        hidden = LeakyReLU(alpha=0.3)(hidden)
+        hidden = Dense(units=10)(hidden)
+        hidden = LeakyReLU(alpha=0.3)(hidden)
+        hidden = Dense(units=10)(hidden)
+        hidden = LeakyReLU(alpha=0.3)(hidden)
+        hidden = Dense(units=class_num, activation='linear')(hidden)
+        outputs = LeakyReLU(alpha=0.3)(hidden)
         super().__init__(inputs=[inputs], outputs=outputs)
