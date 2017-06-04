@@ -12,7 +12,6 @@ from keras import regularizers
 from keras.objectives import mean_squared_error
 from keras.callbacks import EarlyStopping
 import numpy as np
-import matplotlib.pyplot as plt
 from . import errors
 from keras import backend as K
 from keras import metrics

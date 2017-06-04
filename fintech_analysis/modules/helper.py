@@ -1,11 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import numpy as np
-import os
 from keras.models import load_model
 import matplotlib.pyplot as plt
 import seaborn as sns
-import pandas as pd
 from sklearn import preprocessing
 from keras.utils import np_utils
 sns.set()
@@ -23,78 +21,6 @@ class DatasetGenerator(object):
         y_train = np.array([function(factors) for factors in facters_set])
         x_train = facters_set
         return (x_train, y_train)
-
-
-class Reader(object):
-
-    """Docstring for Reader. """
-
-    def __init__(self):
-        self.file_path_list = None
-
-    def set_paths(self, file_path_list):
-        self.file_path_list = file_path_list
-
-    def set_dir(self, dir_path, file_type="csv"):
-        file_path_list = []
-        abspath = os.path.abspath(dir_path)
-        file_names = os.listdir(abspath)
-        for file_name in file_names:
-            root, ext = os.path.splitext(file_name)
-            if ext == ".csv":
-                file_path_list.append(os.path.join(abspath, file_name))
-        self.file_path_list = file_path_list
-        return file_path_list
-
-    def read(self, input_cols, output_cols, verbose=False):
-        x_train = np.empty((0, len(input_cols)))
-        y_train = np.empty((0, len(output_cols)))
-
-        for path in self.file_path_list:
-            df = pd.read_csv(path, delimiter=",", header=None)
-            shape = df.shape
-            if max(input_cols) > shape[1]-1 or max(output_cols) > shape[1]-1:
-                raise ValueError("invalid col. shape is {}".format(shape))
-
-            if verbose is True:
-                print("reading..." + path)
-            x_train = np.append(x_train,
-                                np.array(df.ix[0:, input_cols]),
-                                axis=0)
-
-            y_train = np.append(y_train,
-                                np.array(df.ix[0:, output_cols]),
-                                axis=0)
-
-        self.x_train = x_train
-        self.y_train = y_train
-        return (self.x_train, self.y_train)
-
-    def change_to_one_hot(self, y_train):
-        y_int_train = np.array([int(i > 0) for i in y_train])
-        return np_utils.to_categorical(y_int_train)
-
-    def get_time_window_dataset(self):
-        x_train_2 = []
-        y_train_2 = []
-
-        for i in range(len(self.x_train) - 3):
-            x_train_2.append(np.concatenate((self.x_train[i],
-                                             self.x_train[i + 1],
-                                             self.x_train[i + 2],
-                                             self.x_train[i + 3])))
-            y_train_2.append(self.y_train[i + 3])
-
-        self.x_train_2 = np.array(x_train_2)
-        self.y_train_2 = np.array(y_train_2)
-        return (self.x_train_2, self.y_train_2)
-
-    def set_nam_values(self, col, m_value):
-        self.x_train_2
-        return (self.x_train_2, self.y_train_2)
-
-    def normalize(self, array):
-        return preprocessing.normalize(array, axis=0, norm='l2')
 
 
 class WeightVeiwer(object):
