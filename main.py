@@ -15,12 +15,12 @@ if __name__ == "__main__":
     a.csv_file_config(input_cols=[5, 6, 9],
                       output_cols=[1]
                       )
-    # a.grid_search(file_paths=file_paths,
-    #               epochs=20,
-    #               layer_nums=[4, 5],
-    #               lassos=[0.01, 0.001],
-    #               batch_sizes=[5, 10]
-    #               )
+    a.grid_search(file_paths=file_paths,
+                  epochs=20,
+                  layer_nums=[4, 5],
+                  lassos=[0.01, 0.001],
+                  batch_sizes=[5, 10]
+                  )
     a.training(num=1,
                threshold=0.8,
                batch_size=5,

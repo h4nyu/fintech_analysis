@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from .helper import Reader
 from .neuralnet import NeuralNet
+from .reader import Reader
 
 
 class Analyzer(object):
@@ -21,7 +21,7 @@ class Analyzer(object):
         self.output_cols = output_cols
 
     def read(self, file_paths):
-        self.reader.set_paths(file_paths)
+        self.reader.set_files(file_paths)
         (x, y) = self.reader.read(self.input_cols, self.output_cols)
         self.y_train = self.reader.change_to_one_hot(y)
         self.x_train = self.reader.normalize(x)

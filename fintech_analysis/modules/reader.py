@@ -4,6 +4,7 @@ import os
 import numpy as np
 from keras.utils import np_utils
 from sklearn import preprocessing
+import pandas as pd
 
 
 class Reader(object):
