@@ -3,10 +3,8 @@
 import numpy as np
 from keras.models import load_model
 import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn import preprocessing
 from keras.utils import np_utils
-sns.set()
 
 
 class DatasetGenerator(object):
@@ -34,9 +32,9 @@ class WeightVeiwer(object):
             raise ValueError("model not found")
         self.weights = self.model.get_weights()[0]
 
-    def show_heatmap(self):
-        sns.heatmap(self.weights)
-        plt.show()
+    #  def show_heatmap(self):
+    #      sns.heatmap(self.weights)
+    #      plt.show()
 
     def set_col_names(self, array):
         self.col_names = list(array)
