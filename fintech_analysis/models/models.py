@@ -39,17 +39,16 @@ class FeatureExtractModel(KerasModel):
     def __init__(self, batch_input_shape, class_num):
         """TODO: to be defined1. """
         inputs = InputLayer(batch_input_shape=batch_input_shape).output
-        hidden = LocallyConnected1D(1,
-                                    filter_length=1,
+        hidden = LocallyConnected2D(1,
+                                    kernel_size=(3, 1),
                                     activation='linear',
                                     activity_regularizer=regularizers.l2(0.01))(inputs)
         hidden = Flatten()(hidden)
-        hidden = Dense(units=10)(hidden)
+        hidden = Dense(units=11)(hidden)
         hidden = LeakyReLU(alpha=0.3)(hidden)
-        hidden = Dense(units=10)(hidden)
+        hidden = Dense(units=11)(hidden)
         hidden = LeakyReLU(alpha=0.3)(hidden)
-        hidden = Dense(units=10)(hidden)
+        hidden = Dense(units=11)(hidden)
         hidden = LeakyReLU(alpha=0.3)(hidden)
-        hidden = Dense(units=class_num, activation='linear')(hidden)
-        outputs = LeakyReLU(alpha=0.3)(hidden)
+        outputs = Dense(units=class_num, activation='linear')(hidden)
         super().__init__(inputs=[inputs], outputs=outputs)

@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from keras.models import load_model
-import matplotlib.pyplot as plt
 from sklearn import preprocessing
 from keras.utils import np_utils
 
