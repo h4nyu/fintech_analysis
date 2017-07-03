@@ -17,6 +17,7 @@ include
 share
 pip-selfcheck.json
 dist
+.Python
 
 
 
