@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # s-*- coding: utf-8 -*-
-from fintech_analysis.models import FeatureExtractModel
+from fintech_analysis.models import FeatureExtractClassificationModel
 import keras
 #  import matplotlib.pyplot as plt
 from keras.callbacks import EarlyStopping
@@ -14,24 +14,23 @@ if __name__ == "__main__":
                               output_cols=[1],
                               )
     x_train, y_train = r.get_time_window_dataset(step=10)
-    print(x_train.shape, y_train.shape)
-    #  y_train = r.change_to_one_hot(y_train)
+    y_train = r.change_to_one_hot(y_train)
     #
     x_train = x_train.reshape(-1, x_train.shape[1], x_train.shape[2], 1)
-    #  print(x_train.shape)
-    #  print(y_train.shape)
-    #
-    model = FeatureExtractModel(batch_input_shape=(None, x_train.shape[1], x_train.shape[2], 1),
-                                class_num=y_train.shape[1])
+    print(x_train.shape)
+    print(y_train.shape)
+
+    model = FeatureExtractClassificationModel(batch_input_shape=(None, x_train.shape[1], x_train.shape[2], 1),
+                                              class_num=y_train.shape[1])
     model.summary()
 
-    model.compile(loss=keras.losses.mean_squared_error,
+    model.compile(loss=keras.losses.categorical_crossentropy,
                   optimizer=keras.optimizers.RMSprop(),
-                  metrics=['mse'])
+                  metrics=['acc'])
     model.fit(x_train, y_train,
               batch_size=16,
               epochs=200,
-              verbose=0,
+              verbose=1,
               validation_split=0.3,
               callbacks=[EarlyStopping(patience=3)]
               )
@@ -43,10 +42,14 @@ if __name__ == "__main__":
                                     layer_index)[0]
     print(result.shape)
     answers = y_train[start_index:end_index + 1]
-    # sns.heatmap(np.abs(result[0]), annot=True, cbar=False)
-    # plt.show()
 
     predicts = model.predict(x_train[start_index:end_index + 1])
-    for a, p in zip(answers, predicts):
-        print(a, p)
-    # plt.show()
+
+    metrics = model.evaluate(x_train, y_train, batch_size=32, verbose=1)
+
+    #  Returns the loss value & metrics values for the model in test mode
+    print(metrics)
+
+
+    #  for a, p in zip(answers, predicts):
+    #      print(a, p)

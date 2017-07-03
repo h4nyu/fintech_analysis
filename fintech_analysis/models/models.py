@@ -35,8 +35,8 @@ class KerasModel(Model):
         return output_func(x_predict)
 
 
-class FeatureExtractModel(KerasModel):
-    def __init__(self, batch_input_shape, class_num):
+class FeatureExtractRegressionModel(KerasModel):
+    def __init__(self, batch_input_shape, class_num=1):
         """TODO: to be defined1. """
         inputs = InputLayer(batch_input_shape=batch_input_shape).output
         hidden = LocallyConnected2D(1,
@@ -51,4 +51,23 @@ class FeatureExtractModel(KerasModel):
         hidden = Dense(units=11)(hidden)
         hidden = LeakyReLU(alpha=0.3)(hidden)
         outputs = Dense(units=class_num, activation='linear')(hidden)
+        super().__init__(inputs=[inputs], outputs=outputs)
+
+
+class FeatureExtractClassificationModel(KerasModel):
+    def __init__(self, batch_input_shape, class_num):
+        """TODO: to be defined1. """
+        inputs = InputLayer(batch_input_shape=batch_input_shape).output
+        hidden = LocallyConnected2D(1,
+                                    kernel_size=(3, 1),
+                                    activation='linear',
+                                    activity_regularizer=regularizers.l2(0.01))(inputs)
+        hidden = Flatten()(hidden)
+        hidden = Dense(units=11)(hidden)
+        hidden = LeakyReLU(alpha=0.3)(hidden)
+        hidden = Dense(units=11)(hidden)
+        hidden = LeakyReLU(alpha=0.3)(hidden)
+        hidden = Dense(units=11)(hidden)
+        hidden = LeakyReLU(alpha=0.3)(hidden)
+        outputs = Dense(units=class_num, activation='softmax')(hidden)
         super().__init__(inputs=[inputs], outputs=outputs)
