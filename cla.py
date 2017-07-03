@@ -10,7 +10,7 @@ if __name__ == "__main__":
     r = Reader()
 
     for i in range(765):
-        files = ['./dataset/daily/3.csv']
+        files = ['./dataset/daily/{}.csv'.format(i)]
         r.set_files(files)
         x_train, y_train = r.read(input_cols=range(2, 13),
                                   output_cols=[1],
@@ -31,12 +31,12 @@ if __name__ == "__main__":
                       metrics=['acc'])
         model.fit(x_train, y_train,
                   batch_size=16,
-                  epochs=200,
-                  verbose=1,
+                  epochs=2,
+                  verbose=0,
                   validation_split=0.3,
                   callbacks=[EarlyStopping(patience=3)]
                   )
-        model.sample_weights("cla_w{}.h5".format(i))
+        model.save_weights("cla_w{}.h5".format(i))
 
         start_index = 0
         end_index = len(y_train)
