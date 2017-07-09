@@ -2,7 +2,6 @@ numpy
 pandas
 requests
 keras
-tensorflow
 matplotlib
 seaborn
 sklearn
