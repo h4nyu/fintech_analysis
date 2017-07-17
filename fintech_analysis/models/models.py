@@ -36,11 +36,11 @@ class KerasModel(Model):
 
 
 class FeatureExtractRegressionModel(KerasModel):
-    def __init__(self, batch_input_shape, class_num=1):
+    def __init__(self, batch_input_shape, out_dim=1, kernel_size=(3, 1)):
         """TODO: to be defined1. """
         inputs = InputLayer(batch_input_shape=batch_input_shape).output
         hidden = LocallyConnected2D(1,
-                                    kernel_size=(3, 1),
+                                    kernel_size=kernel_size,
                                     activation='linear',
                                     activity_regularizer=regularizers.l2(0.01))(inputs)
         hidden = Flatten()(hidden)
@@ -50,7 +50,7 @@ class FeatureExtractRegressionModel(KerasModel):
         hidden = LeakyReLU(alpha=0.3)(hidden)
         hidden = Dense(units=11)(hidden)
         hidden = LeakyReLU(alpha=0.3)(hidden)
-        outputs = Dense(units=class_num, activation='linear')(hidden)
+        outputs = Dense(units=out_dim, activation='linear')(hidden)
         super().__init__(inputs=[inputs], outputs=outputs)
 
 

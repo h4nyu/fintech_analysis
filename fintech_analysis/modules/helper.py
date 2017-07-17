@@ -4,6 +4,8 @@ import numpy as np
 from keras.models import load_model
 from sklearn import preprocessing
 from keras.utils import np_utils
+import matplotlib.pyplot as plt
+from fintech_analysis.models import custom_objects
 
 
 class DatasetGenerator(object):
@@ -24,8 +26,8 @@ class WeightVeiwer(object):
 
     """Docstring for WeightVeiwer. """
 
-    def __init__(self, weight_path):
-        self.model = load_model(weight_path)
+    def __init__(self, model):
+        self.model = model
         print(self.model)
         if(self.model is None):
             raise ValueError("model not found")
@@ -104,22 +106,3 @@ class WeightVeiwer(object):
         sum_times = np.sum(self.times, axis=0)
         plt.bar(range(len(sum_times)), sum_times)
         plt.show()
-
-
-class WeightsVeiwer(WeightVeiwer):
-
-    """Docstring for WeightVeiwer. """
-
-    def __init__(self, file_paths):
-        self.file_paths = file_paths
-        if(len(file_paths) == 0):
-            raise ValueError("no file path")
-        self.models = []
-        for path in self.file_paths:
-            self.models.append(load_model(path))
-
-        self.input_weights_array = []
-        for model in self.models:
-            self.input_weights_array.append(model.get_weights()[0])
-        self.input_weights_array = np.array(self.input_weights_array)
-        self.weights = np.mean(self.input_weights_array, axis=0)

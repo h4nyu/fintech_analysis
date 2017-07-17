@@ -2,4 +2,4 @@
 # -*- coding: utf-8 -*-
 from .reader import Reader
 from .modules import Analyzer
-from .modules import WeightsVeiwer
+from .modules import WeightVeiwer

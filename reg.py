@@ -2,23 +2,23 @@
 # s-*- coding: utf-8 -*-
 from fintech_analysis.models import FeatureExtractRegressionModel
 import keras
-#  import matplotlib.pyplot as plt
 from keras.callbacks import EarlyStopping
 from fintech_analysis import Reader
 
 if __name__ == "__main__":
     r = Reader()
-    for i in range(765):
+    for i in range(1):
         files = ['./dataset/daily/{}.csv'.format(i)]
         r.set_files(files)
         x_train, y_train = r.read(input_cols=range(2, 13),
                                   output_cols=[1],
                                   )
-        x_train, y_train = r.get_time_window_dataset(step=10)
+        x_train, y_train = r.get_time_window_dataset(step=1)
         print(x_train.shape, y_train.shape)
         x_train = x_train.reshape(-1, x_train.shape[1], x_train.shape[2], 1)
         model = FeatureExtractRegressionModel(batch_input_shape=(None, x_train.shape[1], x_train.shape[2], 1),
-                                    class_num=y_train.shape[1])
+                                              out_dim=y_train.shape[1],
+                                              kernel_size=(1, 1))
         model.summary()
 
         model.compile(loss=keras.losses.mean_squared_error,
@@ -45,10 +45,7 @@ if __name__ == "__main__":
 
         #  Returns the loss value & metrics values for the model in test mode
         print(metrics)
-        # sns.heatmap(np.abs(result[0]), annot=True, cbar=False)
-        # plt.show()
 
         predicts = model.predict(x_train[start_index:end_index + 1])
-        #  for a, p in zip(answers, predicts):
-        #      print(a, p)
-        # plt.show()
+        for a, p in zip(answers, predicts):
+            print(a, p)
