@@ -10,4 +10,4 @@ services:
         - https_proxy
     volumes:
       - ./:/srv
-
+      - ./store:/store

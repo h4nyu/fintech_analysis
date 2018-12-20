@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from keras.models import load_model
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sns
 import pandas as pd
@@ -89,14 +91,15 @@ class WeightVeiwer(object):
 
     def __init__(self, weight_path):
         self.model = load_model(weight_path)
+        self.out_path
         print(self.model)
         if(self.model is None):
             raise ValueError("model not found")
         self.weights = self.model.get_weights()[0]
 
-    def show_heatmap(self):
+    def show_heatmap(self, path):
         sns.heatmap(self.weights)
-        plt.show()
+        plt.savefig(path)
 
     def set_col_names(self, array):
         self.col_names = list(array)
@@ -105,7 +108,7 @@ class WeightVeiwer(object):
                 self.col_names.append("")
         self.col_names = self.col_names[:len(self.weights)]
 
-    def show_abs_bar(self):
+    def show_abs_bar(self, path):
         plotlist = []
         for item in self.weights:
             plotlist.append(np.abs(item).sum())
@@ -117,9 +120,9 @@ class WeightVeiwer(object):
         axarr.bar(x, plotlist)
         axarr.set_xticks(x)
         axarr.set_xticklabels(labels=self.col_names)
-        plt.show()
+        plt.savefig(path)
 
-    def show_sum_bar(self):
+    def show_sum_bar(self, path):
         plotlist = []
         for item in self.weights:
             plotlist.append(item.sum())
@@ -131,9 +134,9 @@ class WeightVeiwer(object):
         axarr.bar(x, plotlist)
         axarr.set_xticks(x)
         axarr.set_xticklabels(labels=self.col_names)
-        plt.show()
+        plt.savefig(path)
 
-    def show_pn_bar(self):
+    def show_pn_bar(self, path):
         positives = []
         negatives = []
         print(self.weights.shape)
@@ -155,18 +158,18 @@ class WeightVeiwer(object):
         axarr[1].bar(x, negatives)
         axarr[1].set_xticks(x)
         axarr[1].set_xticklabels(self.col_names)
-        plt.show()
+        plt.savefig(path)
 
-    def show_times(self, row, col):
+    def show_times(self, row, col, path):
         self.times = self.plotlist.reshape(row, col)
         for item in self.times:
             plt.scatter(range(len(item)), item)
-        plt.show()
+        plt.savefig(path)
 
-    def sum_times(self):
+    def sum_times(self, path):
         sum_times = np.sum(self.times, axis=0)
         plt.bar(range(len(sum_times)), sum_times)
-        plt.show()
+        plt.savefig(path)
 
 
 class WeightsVeiwer(WeightVeiwer):

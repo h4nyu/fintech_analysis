@@ -8,8 +8,7 @@ if __name__ == "__main__":
     # read training dataset
     file_paths = []
     for i in range(0, 28):
-        file_paths.append(
-            '~/fintech_tutorial/dataset/datazq8/{0}.csv'.format(i))
+        file_paths.append('/store/dataset/datazq8/{0}.csv'.format(i))
     a = Analyzer()
     a.csv_file_config(input_cols=[5, 6, 9],
                       output_cols=[1]
@@ -28,11 +27,14 @@ if __name__ == "__main__":
                lasso=0.01,
                layer_num=4
                )
+
     a.validation
 
-    w = WeightsVeiwer(a.model_paths)
-    w.show_heatmap()
+    w = WeightsVeiwer(
+        a.model_paths
+    )
+    w.show_heatmap('/store/heatmap.png')
     w.set_col_names(['sharpe', 'alpha', 'beta', 'sortino', 'treynor',
                      'volo', 'stockrec', 'maxy'])
-    w.show_abs_bar()
-    w.show_pn_bar()
+    w.show_abs_bar('/store/abs_bar.png')
+    w.show_pn_bar('/store/pn_bar.png')
