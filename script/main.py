@@ -10,7 +10,7 @@ if __name__ == "__main__":
     for i in range(0, 28):
         file_paths.append('/store/dataset/datazq8/{0}.csv'.format(i))
     a = Analyzer()
-    a.csv_file_config(input_cols=[5, 6, 9],
+    a.csv_file_config(input_cols=[2, 3, 4, 5, 6, 7, 8, 9,],
                       output_cols=[1]
                       )
     # a.grid_search(file_paths=file_paths,
